@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loginForm = new FormGroup({
       credentials: new FormGroup({
-        username: new FormControl('', [Validators.required, Validators.email]),
+        email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [Validators.required, Validators.minLength(5)])
       })
     });
@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value.credentials;
-      this.authService.login({ username, password }).subscribe(
+      const { email, password } = this.loginForm.value.credentials;
+      this.authService.login({ email, password }).subscribe(
         (token) => {
           console.log('Token received:', token); // Pour déboguer
           this.authService.saveToken(token.token);

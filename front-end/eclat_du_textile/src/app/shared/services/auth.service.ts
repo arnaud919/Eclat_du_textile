@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.development';
 
 export interface IToken {
   token: string;
@@ -11,11 +12,11 @@ export interface IToken {
   providedIn: 'root'
 })
 export class AuthService {
-  private url = 'http://localhost:8000/api';
+  private url = environment.apiURL;
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  login(credentials: { username: string; password: string }): Observable<IToken> {
+  login(credentials: { email: string; password: string }): Observable<IToken> {
     return this.http.post<IToken>(`${this.url}/login_check`, credentials);
   }
 

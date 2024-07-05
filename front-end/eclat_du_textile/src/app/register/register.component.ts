@@ -14,23 +14,23 @@ import { RegisterService } from '../shared/services/register.service';
 export class RegisterComponent {
 
   service = inject(RegisterService)
-  public loginForm:FormGroup = new FormGroup ({
-    email: new FormControl(''),
+  public RegisterForm:FormGroup = new FormGroup ({
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl(''),
     first_name: new FormControl(''),
     last_name: new FormControl('')
   })
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.service.register(this.loginForm.value).subscribe({
+    if (this.RegisterForm.valid) {
+      this.service.register(this.RegisterForm.value).subscribe({
         next: (response) => {
           console.log('Inscription réussie', response);
-          console.log(this.loginForm.value);
+          console.log(this.RegisterForm.value);
         },
         error: (error) => {
           console.error('Erreur inscription', error);
-          console.log(this.loginForm.value);
+          console.log(this.RegisterForm.value);
         }
       });
     } else {
