@@ -2,12 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
+#[Groups(["services"])]
+#[ApiResource(
+    normalizationContext: ['groups' => ['services']]
+)]
 class Service
 {
     #[ORM\Id]
@@ -26,6 +32,9 @@ class Service
      */
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'service')]
     private Collection $items;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -87,6 +96,18 @@ class Service
                 $item->setService(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

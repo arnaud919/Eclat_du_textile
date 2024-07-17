@@ -16,7 +16,7 @@ export class RegisterComponent {
   service = inject(RegisterService)
   public RegisterForm:FormGroup = new FormGroup ({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl(''),
+    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     first_name: new FormControl(''),
     last_name: new FormControl('')
   })

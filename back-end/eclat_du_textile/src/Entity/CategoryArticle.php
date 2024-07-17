@@ -39,6 +39,9 @@ class CategoryArticle
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'category_article')]
     private Collection $items;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $multiplier_price = null;
+
     public function __construct()
     {
         $this->categoryArticles = new ArrayCollection();
@@ -130,6 +133,18 @@ class CategoryArticle
                 $item->setCategoryArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMultiplierPrice(): ?float
+    {
+        return $this->multiplier_price;
+    }
+
+    public function setMultiplierPrice(?float $multiplier_price): static
+    {
+        $this->multiplier_price = $multiplier_price;
 
         return $this;
     }

@@ -3,36 +3,26 @@
 namespace App\EventSubscriber;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\Event\PrePersistEventArgs;
-use Doctrine\ORM\Events;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class HashUserPasswordSubscriber implements EventSubscriberInterface
+class HashUserPasswordSubscriber
 {
     public function __construct(
         private UserPasswordHasherInterface $hasher
     ) {
     }
 
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::prePersist
-        ];
-    }
+    public function hashPassword(User $user, PrePersistEventArgs $event){
+        $user = $event->getObject();
 
-    public function prePersist(PrePersistEventArgs $args): void
-    {
-        $entity = $args->getObject();
-
-        if (!$entity instanceof User) {
+        if (!$user instanceof User) {
             return;
         }
 
-        $entity->setPassword($this->hasher->hashPassword(
-            $entity,
-            $entity->getPassword()
+        $user->setPassword($this->hasher->hashPassword(
+            $user,
+            $user->getPassword()
         ));
     }
 }

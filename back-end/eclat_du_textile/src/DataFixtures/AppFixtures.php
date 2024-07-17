@@ -15,7 +15,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-/*         // $product = new Product();
+        // $product = new Product();
         // $manager->persist($product);
 
         $count = 20;
@@ -43,6 +43,6 @@ class AppFixtures extends Fixture
             $manager->persist($multiple_user);
         }
 
-        $manager->flush(); */
+        $manager->flush();
     }
 }

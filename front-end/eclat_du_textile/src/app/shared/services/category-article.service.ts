@@ -14,7 +14,9 @@ export class CategoryArticleService {
   constructor(private http: HttpClient) { }
 
   fetchAllCategoryArticle(): Observable<categoryArticleEntitie[]> {
-    return this.http.get<categoryArticleEntitie[]>(this.CategoryArticleUrl);
+    let data =  this.http.get<categoryArticleEntitie[]>(this.CategoryArticleUrl);
+    console.log(data);
+    return data;
   }
 
 }

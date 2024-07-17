@@ -38,6 +38,9 @@ class Item
     #[ORM\Column]
     private ?float $price_service = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $multiplier_price = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,6 +126,18 @@ class Item
     public function setPriceService(float $price_service): static
     {
         $this->price_service = $price_service;
+
+        return $this;
+    }
+
+    public function getMultiplierPrice(): ?float
+    {
+        return $this->multiplier_price;
+    }
+
+    public function setMultiplierPrice(?float $multiplier_price): static
+    {
+        $this->multiplier_price = $multiplier_price;
 
         return $this;
     }

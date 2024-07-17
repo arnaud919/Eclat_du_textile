@@ -15,9 +15,6 @@ class Color
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $color = null;
-
     #[ORM\Column(length: 255)]
     private ?string $name_color = null;
 
@@ -35,18 +32,6 @@ class Color
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getColor(): ?int
-    {
-        return $this->color;
-    }
-
-    public function setColor(int $color): static
-    {
-        $this->color = $color;
-
-        return $this;
     }
 
     public function getNameColor(): ?string

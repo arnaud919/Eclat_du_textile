@@ -21,6 +21,9 @@ class Nationality
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'nationality_employee')]
     private Collection $users;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name_nationality = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -57,6 +60,18 @@ class Nationality
                 $user->setNationalityEmployee(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNameNationality(): ?string
+    {
+        return $this->name_nationality;
+    }
+
+    public function setNameNationality(?string $name_nationality): static
+    {
+        $this->name_nationality = $name_nationality;
 
         return $this;
     }
