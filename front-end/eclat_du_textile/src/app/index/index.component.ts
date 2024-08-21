@@ -6,7 +6,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiListResponse, ServiceProvision } from '../shared/interfaces/entities';
-import { ServiceProvisionService } from '../shared/services/service-provision.service';
+import { ServiceProvisionResponseService } from '../shared/services/service-provision.service';
 
 @Component({
   selector: 'app-index',
@@ -20,16 +20,15 @@ export class IndexComponent implements OnInit {
   data: ApiListResponse | undefined;
   members: ServiceProvision[] = [];
 
-  constructor(private serviceProvisionservice: ServiceProvisionService) {}
+  constructor(private ServiceProvisionResponseservice: ServiceProvisionResponseService) {}
 /*   categoryArticle$ = inject(CategoryArticleService).fetchAllCategoryArticle(); */
 
 article: any;
 
 ngOnInit(): void {
-  this.serviceProvisionservice.getJsonLdData().subscribe((response: ApiListResponse) => {
+  this.ServiceProvisionResponseservice.fetchAllServicesProvision().subscribe((response: ApiListResponse) => {
     this.data = response
     this.members = response["hydra:member"]
-    console.log(this.members);
   })
 }
 

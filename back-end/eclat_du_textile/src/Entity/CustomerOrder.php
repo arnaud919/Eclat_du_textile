@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CustomerOrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CustomerOrderRepository::class)]
+#[Groups(["customerorder"])]
+#[ApiResource(
+    normalizationContext: ['groups' => ['customerorder']]
+)]
 class CustomerOrder
 {
     #[ORM\Id]

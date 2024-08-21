@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -35,6 +36,9 @@ class Service
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image_service = null;
 
     public function __construct()
     {
@@ -108,6 +112,18 @@ class Service
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImageService(): ?string
+    {
+        return $this->image_service;
+    }
+
+    public function setImageService(?string $image_service): static
+    {
+        $this->image_service = $image_service;
 
         return $this;
     }

@@ -1,11 +1,80 @@
-header{
+*{
+    @font-face {
+        font-family: "Fira Sans";
+        src: url("assets/fonts/FiraSans-Regular.ttf") format("truetype");
+    }
+
+    @font-face {
+        font-family: "Allerta";
+        src: url("assets/fonts/Allerta-Regular.ttf") format("truetype");
+    }
+
+    @font-face {
+        font-family: "Lato";
+        src: url("assets/fonts/Lato-Regular.ttf") format("truetype");
+    }
+
+    @font-face {
+        font-family: "Montserrat";
+        src: url("assets/fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+    }
+
+    h1, h2, h3, h4, h5, h6{
+        font-family: "Fira Sans", "Lato";
+    }
+
+    font-family: "Allerta", "Fira Sans";
+}
+
+header {
     background-color: #19456B;
 }
 
-footer{
+footer {
     background-color: #C5E898;
 }
 
-body{
+body {
     background-color: #F8F1F1;
+}
+
+.page_title {
+    text-align: center;
+    color: #19456B;
+    margin: 100px 0px;
+    text-decoration: underline;
+}
+
+.service_provision {
+
+    border: solid #19456B 1px;
+    border-radius: 20px;
+    color: #19456B;
+    text-align: center;
+    text-decoration: none;
+
+    .service_provision_name {
+        font-weight: 550;
+        margin: 10px 0px;
+    }
+
+    .service_provision_image {
+        display: block;
+        margin: 20px auto;
+        width: auto;
+        height: 30px;
+
+        img {
+            height: 100%;
+            width: auto;
+        }
+    }
+
+    .service_provision_description {
+        margin: 20px 0px;
+    }
+
+    &:hover {
+        border: solid #19456B 2px;
+    }
 }

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
 
-export interface IToken {
+export interface Token {
   token: string;
 }
 
@@ -16,8 +16,8 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  login(credentials: { email: string; password: string }): Observable<IToken> {
-    return this.http.post<IToken>(`${this.url}api/login_check`, credentials);
+  login(credentials: { email: string; password: string }): Observable<Token> {
+    return this.http.post<Token>(`${this.url}api/login_check`, credentials);
   }
 
   saveToken(token: string): void {

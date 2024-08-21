@@ -13,7 +13,7 @@ export class EntityService {
     protected http: HttpClient, @Inject('baseUri') protected entityBaseUri: string
   ) { }
 
-  fetchAll(): Observable<ApiListResponse<T>> {
+  fetchAllServicesProvision(): Observable<ApiListResponse<T>> {
     return this.http.get<ApiListResponse<T>>(
       `${environment.apiURL}${this.entityBaseUri}`
     );

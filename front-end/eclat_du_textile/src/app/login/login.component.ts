@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
-import { IToken } from '../shared/interfaces/entities';
+import { Token } from '../shared/interfaces/entities';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 

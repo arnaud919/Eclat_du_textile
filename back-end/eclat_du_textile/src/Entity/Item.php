@@ -2,10 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
+#[Groups(["item"])]
+#[ApiResource(
+    normalizationContext: ['groups' => ['item']]
+)]
 class Item
 {
     #[ORM\Id]

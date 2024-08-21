@@ -2,12 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
+#[Groups(["job"])]
+#[ApiResource(
+    normalizationContext: ['groups' => ['job']]
+)]
 class Job
 {
     #[ORM\Id]

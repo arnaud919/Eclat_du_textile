@@ -1,0 +1,101 @@
+.service_provision_item_container {
+    margin: 50px 0px;
+
+    .service_provision_item_select {
+
+        order: 0;
+
+        >* {
+            margin: 50px auto;
+        }
+
+        .options {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+
+            select {
+                border: solid black 1px;
+            }
+
+            >* {
+                width: 100%;
+                display: block;
+            }
+        }
+
+        button.add_item {
+            border: none;
+            display: block;
+            margin: 0px auto;
+            width: 150px;
+            text-decoration: none;
+            color: #C5E898;
+            background-color: #19456B;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    }
+
+    .service_provision_item_line {
+
+        .service_provision_item_line_content {
+            border: solid 1px gray;
+            width: 1px;
+            height: 100%;
+            padding: 0%;
+        }
+
+    }
+
+
+    .service_provision_item {
+
+        order: 2;
+        margin: 50px 0px;
+
+        .service_provision_item_content {
+            border: solid #19456B 2px;
+            border-radius: 20px;
+            color: #19456B;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18.72px;
+
+            >* {
+                margin: 30px auto;
+            }
+
+            .service_provision_item_name {
+                font-weight: 550;
+                margin: 10px 0px;
+                font-size: 32px;
+                text-decoration: underline;
+            }
+
+            .service_provision_item_image {
+                display: block;
+                width: auto;
+                height: 40px;
+
+                img {
+                    height: 100%;
+                    width: auto;
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width:576px) {
+
+        .service_provision_item_select {
+
+            order: 2;
+        }
+
+        .service_provision_item {
+
+            order: 0;
+        }
+    }
+}

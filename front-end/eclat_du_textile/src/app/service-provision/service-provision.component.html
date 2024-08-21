@@ -1,1 +1,15 @@
-<h1>Nos prestations</h1>
+<section class="container">
+
+    <h1 class="page_title">Nos prestations</h1>
+
+    <div class="row justify-content-center gap-5">
+        <a class="service_provision col-xs-12 col-md-3" *ngFor="let member of members" routerLink="{{member.id}}">
+            <div class="service_provision_name">{{member.name_service}}</div>
+            <div class="service_provision_image" *ngIf="member.image_service">
+                <img class="" src="assets/images/{{member.image_service}}" alt="{{member.name_service}}">
+            </div>
+            <div class="service_provision_description">{{member.description}}</div>
+        </a>
+    </div>
+
+</section>
