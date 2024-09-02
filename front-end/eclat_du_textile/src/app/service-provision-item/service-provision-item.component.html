@@ -1,54 +1,61 @@
 <section *ngIf="ServiceProvisionResponseItemData" class="container">
+    
+    <a class="back" routerLink="/nos_prestations">Retour</a>
+
     <div class="row justify-content-center gap-2 d-flex align-item-center service_provision_item_container">
-        <div class="col-md-5 col-xs-12 order-sm-2 order-md-0 service_provision_item_select">
+        <form [formGroup]="itemForm" (ngSubmit)="addItem()" class="col-md-5 col-xs-12 order-sm-2 order-md-0 service_provision_item_select">
 
             <div class="options">
                 <label for="cloth">Vêtements</label>
-                <select name="cloth" id="cloth">
+                <select formControlName="cloth" name="cloth" id="cloth" (change)="onArticleSelect($event)" required="">
 
                     <option value="">--Selectionner votre vêtement--</option>
-                    @for (categoryArticle of CategoryArticleMembers; track categoryArticle.id) {
 
-                    @if (categoryArticle.subcategory_article) {
-                    <option value="{{categoryArticle.name_category_article}}">
+                    <option *ngFor="let categoryArticle of CategoryArticleMembers | isSubArticle;" [value]="categoryArticle.id">
                         {{categoryArticle.name_category_article}}
-                        {{categoryArticle.multiplier_price}}
                     </option>
-                    }
-                    }
                 </select>
+                <div *ngIf="itemForm.get('cloth')?.invalid && itemForm.get('cloth')?.touched">
+                    Champs requis
+                </div>
             </div>
 
 
             <div class="options">
                 <label for="material">Type de matériau</label>
-                <select name="material" id="material">
+                <select formControlName="material" name="material" id="material">
 
                     <option value="">--Selectionner votre matériau--</option>
                     @for(typeMaterial of TypeMaterialMembers; track typeMaterial.id){
                     <option value="{{typeMaterial.name_type_material}}">{{typeMaterial.name_type_material}}</option>
                     }
                 </select>
+                <div *ngIf="itemForm.get('material')?.invalid && itemForm.get('material')?.touched">
+                    Champs requis
+                </div>
             </div>
 
 
             <div class="options">
                 <label for="color">Couleur</label>
-                <select name="color" id="color">
+                <select formControlName="color" name="color" id="color">
 
                     <option value="">--Selectionner votre couleur--</option>
                     @for(color of ColorMembers; track color.id){
                     <option value="{{color.name_color}}">{{color.name_color}}</option>
                     }
                 </select>
+                <div *ngIf="itemForm.get('color')?.invalid && itemForm.get('color')?.touched">
+                    Champs requis
+                </div>
             </div>
 
 
-            <button class="add_item">
+            <button class="add_item" type="submit">
                 Ajouter
             </button>
 
-        </div>
+        </form>
 
         <div class="col-2 service_provision_item_line row justify-content-center">
             <div class="service_provision_item_line_content"></div>
@@ -66,9 +73,13 @@
                 <div>
                     Description
                 </div>
-                <div class="d-flex justify-content-evenly service_provision_item_price">
+                <div class="d-flex justify-content-evenly">
                     <span>Prix :</span>
-                    <span>{{ServiceProvisionResponseItemData.price_service}} €</span>
+                        @if(selectedArticle !== null){
+                            <span>{{ServiceProvisionResponseItemData.price_service * selectedArticle.multiplier_price | number:'1.0-2'}} €</span>
+                        } @else if(selectedArticle === null){
+                            <span>{{ServiceProvisionResponseItemData.price_service}} €</span>
+                        }
                 </div>
             </div>
         </div>

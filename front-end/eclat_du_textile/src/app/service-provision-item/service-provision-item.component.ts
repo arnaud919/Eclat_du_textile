@@ -7,26 +7,54 @@ import { Subscription } from 'rxjs';
 import { CategoryArticleService } from '../shared/services/category-article.service';
 import { TypeMaterialService } from '../shared/services/type-material.service';
 import { ColorService } from '../shared/services/color.service';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FilterArticlePipe } from '../shared/pipes/filter-article.pipe';
+import { CartShopService } from '../shared/services/cart-shop.service';
 
 @Component({
   selector: 'app-service-provision-item',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, FilterArticlePipe],
   templateUrl: './service-provision-item.component.html',
   styleUrl: './service-provision-item.component.css'
 })
 export class ServiceProvisionResponseItemComponent {
 
-  ServiceProvisionResponseItemData: ServiceProvision | undefined
+  //Interfaces
+  //Donnée du service choisi
+  ServiceProvisionResponseItemData: ServiceProvision | null = null
   ApiData: ApiListResponse | undefined
   CategoryArticleMembers: CategoryArticle[] = []
   TypeMaterialMembers: TypeMaterial[] = []
   ColorMembers: Color[] = []
+  ServiceProvisionResponseData: Subscription | null = null;
+
+  //Subscriptions
+  articleSubscription: Subscription | null = null;
+  formControlSubscription: Subscription | null = null;
+
   
+  //find particular article
+  selectedArticle: CategoryArticle | null = null
 
-  ServiceProvisionResponseData!: Subscription
 
-  constructor(private ServiceProvisionResponseService:ServiceProvisionResponseService, private CategoryArticleResponseService:CategoryArticleService, private TypeMaterialResponseService:TypeMaterialService, private ColorResponseService:ColorService ,private route:ActivatedRoute) { }
+  /**
+   * Form of the service prestation
+   */
+  itemForm: FormGroup = new FormGroup({
+    cloth: new FormControl('', Validators.required),
+    material: new FormControl('', Validators.required),
+    color: new FormControl('', Validators.required),
+  });
+
+  constructor(private ServiceProvisionResponseService: ServiceProvisionResponseService,
+    private CategoryArticleResponseService: CategoryArticleService,
+    private TypeMaterialResponseService: TypeMaterialService,
+    private ColorResponseService: ColorService,
+    private route: ActivatedRoute,
+    private cartShop: CartShopService) { }
+
+
 
   ngOnInit(): void {
     this.selectedServiceProvisionResponse();
@@ -35,33 +63,45 @@ export class ServiceProvisionResponseItemComponent {
     this.allColor();
   }
 
-  selectedServiceProvisionResponse(){
+
+  addItem() {
+    if(this.itemForm.valid){
+
+    }
+  }
+
+  selectedServiceProvisionResponse() {
     this.route.params.subscribe(params => {
-      this.ServiceProvisionResponseService.fetchOneServiceProvisionResponse(params['id']).subscribe( data => {
+      this.ServiceProvisionResponseService.fetchOneServiceProvisionResponse(params['id']).subscribe(data => {
         this.ServiceProvisionResponseItemData = data;
       })
     })
   }
 
-  allCategoryArticle(){
+  allCategoryArticle() {
     this.CategoryArticleResponseService.fetchAllCategoryArticle().subscribe((response: ApiListResponse) => {
       this.ApiData = response;
       this.CategoryArticleMembers = response["hydra:member"];
     })
   }
 
-  allTypeMaterial(){
+  allTypeMaterial() {
     this.TypeMaterialResponseService.fetchAllTypeMaterials().subscribe((response: ApiListResponse) => {
       this.ApiData = response;
       this.TypeMaterialMembers = response["hydra:member"];
-    } )
+    })
   }
 
-  allColor(){
+  allColor() {
     this.ColorResponseService.fetchAllColor().subscribe((response: ApiListResponse) => {
       this.ApiData = response;
       this.ColorMembers = response["hydra:member"];
-    } )
+    })
+  }
+
+  onArticleSelect(event: Event) {
+    const selectedArticleId = +(event.target as HTMLSelectElement).value; // Convertit la valeur en nombre
+    this.selectedArticle = this.CategoryArticleMembers.find(product => product.id === selectedArticleId) || null;
   }
 
   ngOnDestroy(): void {

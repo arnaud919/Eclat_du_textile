@@ -83,8 +83,35 @@ export interface Item {
   color: string,
   service: string,
   customer_order: string,
-  price_service: 0,
-  multiplier_price: 0
+  price_service: number,
+  multiplier_price: number
+}
+
+export interface PostItem {
+  name_item: string,
+  category_article: string,
+  type_material: string,
+  color: string,
+  service: string,
+  customer_order: string,
+  price_service: number,
+  multiplier_price: number,
+  nameItem: string,
+  categoryArticle: string,
+  typeMaterial: string,
+  customerOrder: string,
+  priceService: number,
+  multiplierPrice: number
+}
+
+export interface UniqueItem {
+  name_item: string,
+  category_article: string,
+  type_material: string,
+  color: string,
+  service: string,
+  price_service: number,
+  multiplier_price: number
 }
 
 export interface TypeMaterial{

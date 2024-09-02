@@ -13,16 +13,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   styleUrl: './service-provision.component.css'
 })
 export class ServiceProvisionResponseComponent implements OnInit {
-  /*   constructor(private entityservice: EntityService<CategoryArticleService>){}
-  
-    service_provision : ServiceProvision[] = [];
-  
-    ngOnInit(): void {
-      this.entityservice.fetchAllServicesProvision().subcribe((data) => {
-        this.service_provision = data["hydra:member"];
-        console.log(this.service_provision);
-      })
-    }  */
 
   ServiceProvisionResponseItemData: ServiceProvision | undefined;
   data: ApiListResponse | undefined;
