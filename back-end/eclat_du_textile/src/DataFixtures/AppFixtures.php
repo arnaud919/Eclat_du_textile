@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i<$count; $i++){
             $multiple_user = new User();
             $multiple_user->setEmail($faker->email());
-            $multiple_user->setPassword($faker->password(10));
+            $multiple_user->setPassword($this->hasher->hashPassword($multiple_user, $faker->password(10)));
             $multiple_user->setFirstName($faker->firstName());
             $multiple_user->setLastName($faker->lastName());
             $multiple_user->setPhone($faker->e164PhoneNumber());

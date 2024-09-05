@@ -27,7 +27,6 @@ export class ServiceProvisionResponseItemComponent {
   CategoryArticleMembers: CategoryArticle[] = []
   TypeMaterialMembers: TypeMaterial[] = []
   ColorMembers: Color[] = []
-  ServiceProvisionResponseData: Subscription | null = null;
 
   //Subscriptions
   articleSubscription: Subscription | null = null;
@@ -105,6 +104,6 @@ export class ServiceProvisionResponseItemComponent {
   }
 
   ngOnDestroy(): void {
-    this.ServiceProvisionResponseData;
+
   }
 }

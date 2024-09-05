@@ -3,12 +3,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../shared/services/auth.service';
 import { Token } from '../shared/interfaces/entities';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
         (token) => {
           console.log('Token received:', token); // Pour déboguer
           this.authService.saveToken(token.token);
-          this.router.navigate(['/dashboard']); // Redirection après connexion réussie
+          this.router.navigate(['/']); // Redirection après connexion réussie
         },
         error => {
           console.error('Login failed', error);

@@ -1,14 +1,10 @@
 <div>Accueil</div>
-<select name="category_article" id="category_article">
-<!--     <option *ngFor="let category of categoryArticle$ | async" value="{{category.name_category_article}}">
-        {{category.name_category_article}}
-    </option> -->
-</select>
 
 <div *ngIf="data">
-    <pre>{{ data['hydra:totalItems'] | json }}</pre>
 
     <div *ngFor="let member of members">
         <div>{{member.name_service}}</div>
     </div>
+
+
 </div>

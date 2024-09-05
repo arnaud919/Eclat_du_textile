@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
+import jwt_decode from 'jwt-decode';
 
 export interface Token {
   token: string;
@@ -28,6 +29,16 @@ export class AuthService {
     const token = localStorage.getItem('token');
     return !!token;
   }
+
+  isAdmin(): boolean {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      const decodedToken: any = jwt_decode(token);
+      return decodedToken.roles.includes('ROLE_ADMIN');
+    }
+    return false;
+  }
+
 
   getToken(): string | null {
     return localStorage.getItem('token');
