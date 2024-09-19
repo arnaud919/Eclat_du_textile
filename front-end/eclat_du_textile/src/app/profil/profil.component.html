@@ -1,0 +1,23 @@
+<div class="profile-container" *ngIf="userProfile; else loading">
+  <h2>Mon Profil</h2>
+  <div>
+    <p><strong>Email :</strong> {{ userProfile.email }}</p>
+    <p><strong>Prénom :</strong> {{ userProfile.first_name || 'Non disponible' }}</p>
+    <p><strong>Nom :</strong> {{ userProfile.last_name || 'Non disponible' }}</p>
+    <p><strong>Rôles :</strong> {{ userProfile.roles.join(', ') }}</p>
+
+    <div *ngIf="isAdmin">
+      <p><strong>Statut :</strong> Administrateur</p>
+    </div>
+  </div>
+</div>
+
+<!-- Template de chargement -->
+<ng-template #loading>
+  <p>Chargement des informations du profil...</p>
+</ng-template>
+
+<!-- Affichage des erreurs -->
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
