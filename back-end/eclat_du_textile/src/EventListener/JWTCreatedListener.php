@@ -18,6 +18,8 @@ final class JWTCreatedListener
 
         // Ajouter l'ID de l'utilisateur au payload
         $payload['id'] = $user->getId();
+        $payload['first_name'] = $user->getFirstName();
+        $payload['last_name'] = $user->getLastName();
 
         // Mettre à jour les données du token
         $event->setData($payload);

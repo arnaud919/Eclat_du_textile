@@ -7,6 +7,7 @@ import { RegisterComponent } from './register/register.component';
 import { ServiceProvisionResponseComponent } from './service-provision/service-provision.component';
 import { ServiceProvisionResponseItemComponent } from './service-provision-item/service-provision-item.component';
 import { AdminComponent } from './admin/admin.component';
+import { ProfileComponent } from './profil/profil.component';
 
 export const routes: Routes = [
     {path:"", component:IndexComponent},
@@ -15,10 +16,11 @@ export const routes: Routes = [
     {path:"register", component:RegisterComponent },
     {path:"nos_prestations", component:ServiceProvisionResponseComponent},
     {path:"nos_prestations/:id", component:ServiceProvisionResponseItemComponent},
-    {path:"**", redirectTo:""},
+    {path:"profil", component:ProfileComponent},
     {path: "admin", component:AdminComponent, canActivate: [authGuard], children: [
         {
             path:"dashboard", component:DashboardComponent
         }
-    ]}
+    ]},
+    {path:"**", redirectTo:""}
 ];

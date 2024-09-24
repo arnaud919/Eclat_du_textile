@@ -10,21 +10,21 @@
     </div>
     <div>
       <label for="password">Mot de passe</label>
-      <input id="password" type="password" formControlName="password">
+      <input id="password" type="password" formControlName="password" required>
       <div *ngIf="RegisterForm.get('password')?.invalid && RegisterForm.get('password')?.touched">
         Mot de passe requis
       </div>
     </div>
     <div>
       <label for="first_name">Prénom</label>
-      <input id="first_name" type="text" formControlName="first_name">
+      <input id="first_name" type="text" formControlName="first_name" required>
       <div *ngIf="RegisterForm.get('first_name')?.invalid && RegisterForm.get('first_name')?.touched">
         Prenom requis
       </div>
     </div>
     <div>
       <label for="last_name">Nom de famille</label>
-      <input id="last_name" type="text" formControlName="last_name">
+      <input id="last_name" type="text" formControlName="last_name" required>
       <div *ngIf="RegisterForm.get('last_name')?.invalid && RegisterForm.get('last_name')?.touched">
         Nom de famille requis
       </div>

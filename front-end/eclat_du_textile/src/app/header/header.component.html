@@ -18,6 +18,9 @@
           <a class="btn btn-primary " routerLink="/login">Se connecter</a>
         </li>
         <li class="nav-item" *ngIf="authService.isLogged()">
+          <a class="nav-link" routerLink="profil">Profil</a>
+        </li>
+        <li class="nav-item" *ngIf="authService.isLogged()">
           <a class="btn btn-danger" (click)="logout()">Se deconnecter</a>
         </li>
       </ul>

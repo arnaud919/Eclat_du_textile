@@ -17,16 +17,14 @@ export interface ConnectUser {
   password: string;
 }
 
-export interface ServiceProvision {
+export interface CustomerInfo {
   "@context": string,
   "@id": string,
   "@type": string,
-  "id": number,
-  "name_service": string,
-  "price_service": number,
-  "items": [],
-  "description": string,
-  "image_service": string
+  id: number,
+  username: string,
+  first_name:string,
+  last_name: string,
 }
 
 export interface CategoryArticle {
