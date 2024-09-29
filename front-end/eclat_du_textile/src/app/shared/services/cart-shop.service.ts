@@ -1,30 +1,27 @@
-import { Injectable, signal } from '@angular/core';
-import { Item, PostItem } from '../interfaces/entities';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartShopService {
+  private panierKey = 'serviceProvisionData';
 
-  private itemCart:Item[] = [];
-  private itemList: [] = [];
-
-  addToCart(item:Item): void {
-    const existingItem = this.itemCart.find(cartItem => cartItem.id === item.id);
-    if (!existingItem) {
-      this.itemCart.push(item);
-    }
+  // Récupérer le panier depuis le sessionStorage
+  getPanier(): any {
+    const storedPanier = sessionStorage.getItem(this.panierKey);
+    return storedPanier ? JSON.parse(storedPanier) : { items: [], coordinates: null, payment: null };
   }
 
-  getCartItems(): Item[] {
-    return this.itemCart;
+  // Mettre à jour les données du panier (articles, coordonnées, paiement)
+  updatePanierData(items: any[], coordinates: any = null, payment: any = null): void {
+    const panier = { items, coordinates, payment };
+    sessionStorage.setItem(this.panierKey, JSON.stringify(panier));
+    console.log('Panier mis à jour :', panier);
   }
 
-  removeFromCart(item: Item): void {
-    this.itemCart = this.itemCart.filter(itemCart => itemCart.id !== item.id);
-  }
-
-  clearCart(): void {
-    this.itemCart = [];
+  // Vider le panier après confirmation
+  clearPanier(): void {
+    sessionStorage.removeItem(this.panierKey);
+    console.log('Panier vidé');
   }
 }

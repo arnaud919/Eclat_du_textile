@@ -8,15 +8,16 @@ import { ServiceProvisionResponseComponent } from './service-provision/service-p
 import { ServiceProvisionResponseItemComponent } from './service-provision-item/service-provision-item.component';
 import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profil/profil.component';
+import { CartShopComponent } from './cart-shop/cart-shop.component';
 
 export const routes: Routes = [
     {path:"", component:IndexComponent},
-    {path:"dashboard", component:DashboardComponent, canActivate: [authGuard] },
     {path:"login", component: LoginComponent},
     {path:"register", component:RegisterComponent },
     {path:"nos_prestations", component:ServiceProvisionResponseComponent},
     {path:"nos_prestations/:id", component:ServiceProvisionResponseItemComponent},
-    {path:"profil", component:ProfileComponent},
+    {path:"profil", component:ProfileComponent, canActivate: [authGuard]},
+    {path:"commande", component:CartShopComponent, canActivate: [authGuard]},
     {path: "admin", component:AdminComponent, canActivate: [authGuard], children: [
         {
             path:"dashboard", component:DashboardComponent

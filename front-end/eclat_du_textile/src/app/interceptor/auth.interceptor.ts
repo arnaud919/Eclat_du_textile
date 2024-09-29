@@ -6,7 +6,7 @@ import { AuthService } from '../shared/services/auth.service';
 
 export function authInterceptor (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const authService = inject(AuthService);
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   if (token) {
     req = req.clone({

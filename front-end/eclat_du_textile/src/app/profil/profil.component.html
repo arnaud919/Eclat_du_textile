@@ -1,7 +1,7 @@
 <div class="profile-container" *ngIf="userProfile; else loading">
   <h2>Mon Profil</h2>
   <div>
-    <p><strong>Email :</strong> {{ userProfile.username }}</p>
+    <p><strong>Email :</strong> {{ userProfile.username || 'Non disponible' }}</p>
     <p><strong>Prénom :</strong> {{ userProfile.first_name || 'Non disponible' }}</p>
     <p><strong>Nom :</strong> {{ userProfile.last_name || 'Non disponible' }}</p>
 
@@ -27,22 +27,22 @@
 <button (click)="clearData()">Effacer l'historique</button>
 
 <!-- Si aucune donnée n'est trouvée -->
-<div *ngIf="serviceData.length === 0">
+<div *ngIf="serviceData?.length === 0">
   <p>Aucune donnée disponible.</p>
 </div>
 
-<!-- Affichage des données récupérées -->
-<div *ngFor="let entry of serviceData; let i = index">
+<div *ngFor="let item of serviceData; let i = index">
   <h3>Entrée {{ i + 1 }}</h3>
-  <p><strong>Nom du service :</strong> {{ entry.serviceName }}</p>  <!-- Nom du service -->
-  <p><strong>Nom du vêtement :</strong> {{ entry.clothName }}</p>   <!-- Nom du vêtement -->
-  <p><strong>Prix total :</strong> {{ entry.totalPrice | number:'1.0-2' }} €</p>  <!-- Prix total -->
-  <p><strong>Matière :</strong> {{ entry.material }}</p>  <!-- Matière -->
-  <p><strong>Couleur :</strong> {{ entry.color }}</p>  <!-- Couleur -->
+  <p><strong>Nom du service :</strong> {{ item.serviceName }}</p>
+  <p><strong>Nom du vêtement :</strong> {{ item.clothName }}</p>
+  <p><strong>Quantité :</strong> {{ item.quantity }}</p>  <!-- Quantité d'articles -->
+  <p><strong>Prix total :</strong> {{ item.totalPrice | number:'1.2-2' }} €</p>  <!-- Prix total pour cette quantité -->
+  <button (click)="removeItem(i)">Supprimer cet article</button>
   <hr>
 </div>
 
-<!-- Affichage du prix total -->
+<!-- Affichage du prix total pour tous les services -->
 <div *ngIf="totalPrice > 0">
   <h3>Prix total pour tous les services : {{ totalPrice | number:'1.0-2' }} €</h3>
+  <h3><a [routerLink]="['/commande']">Passer commande</a></h3>
 </div>

@@ -23,20 +23,20 @@ export class AuthService {
     return this.http.post<Token>(`${this.url}api/login_check`, credentials);
   }
 
-  // Sauvegarder le token dans le localStorage
+  // Sauvegarder le token dans le sessionStorage
   saveToken(token: string): void {
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
   }
 
   // Vérifier si l'utilisateur est connecté
   isLogged(): boolean {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return !!token;  // Retourne true si un token est présent
   }
 
   // Vérifier si l'utilisateur est un admin en décodant le token JWT
   isAdmin(): boolean {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       const decodedToken: any = jwtDecode(token);  // Utilise 'jwt_decode' pour décoder le token
       return decodedToken.roles && decodedToken.roles.includes('ROLE_ADMIN');
@@ -44,14 +44,15 @@ export class AuthService {
     return false;
   }
 
-  // Récupérer le token JWT depuis le localStorage
+  // Récupérer le token JWT depuis le sessionStorage
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 
   // Déconnecter l'utilisateur (supprimer le token et rediriger vers la page de login)
   logout(): void {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('serviceProvisionData');  // Supprimer les données liées à la commande ou aux services
     this.router.navigate(['login']);  // Rediriger vers la page de login
   }
 

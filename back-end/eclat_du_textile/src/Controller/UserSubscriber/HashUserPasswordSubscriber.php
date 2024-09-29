@@ -44,7 +44,7 @@ class HashUserPasswordSubscriber implements EventSubscriber
 
             // Recalcule le changement de l'entité pour que Doctrine prenne en compte la mise à jour du mot de passe
             $em = $args->getObjectManager();
-            $em->persist($entity);  // Persist the entity again to trigger the change detection
+            $em->persist($entity);
         }
     }
 

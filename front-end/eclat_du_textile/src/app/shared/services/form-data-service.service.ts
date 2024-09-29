@@ -5,23 +5,21 @@ import { Injectable } from '@angular/core';
 })
 export class FormDataServiceService {
 
-  private storageKey = 'formData';  // Clé utilisée pour stocker les données
+  private storageKey = 'serviceProvisionData';  // Clé pour stocker les données
 
-  constructor() {}
-
-  // Méthode pour stocker les données dans le localStorage
+  // Méthode pour stocker les données dans le sessionStorage
   setFormData(data: any): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(data));  // Convertir l'objet en chaîne JSON
+    sessionStorage.setItem(this.storageKey, JSON.stringify(data));  // Convertir l'objet en chaîne JSON
   }
 
-  // Méthode pour récupérer les données du localStorage
+  // Méthode pour récupérer les données du sessionStorage
   getFormData(): any {
-    const data = localStorage.getItem(this.storageKey);  // Récupérer les données sous forme de chaîne JSON
-    return data ? JSON.parse(data) : {};  // Si les données existent, les convertir en objet
+    const data = sessionStorage.getItem(this.storageKey);  // Récupérer les données sous forme de chaîne JSON
+    return data ? JSON.parse(data) : [];  // Si les données existent, les convertir en objet
   }
 
-  // Méthode pour vider les données du localStorage (facultatif)
+  // Méthode pour vider les données du sessionStorage
   clearFormData(): void {
-    localStorage.removeItem(this.storageKey);  // Supprimer les données du localStorage
+    sessionStorage.removeItem(this.storageKey);  // Supprimer les données du sessionStorage
   }
 }

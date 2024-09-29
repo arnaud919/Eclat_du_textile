@@ -47,7 +47,8 @@ export interface ServiceProvision {
   price_service: number,
   items: [],
   description: string,
-  image_service: string
+  image_service: string,
+  quantity: number,
 }
 
 export interface Color {

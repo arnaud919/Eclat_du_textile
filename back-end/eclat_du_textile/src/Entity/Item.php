@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ItemRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -37,15 +39,25 @@ class Item
     #[ORM\JoinColumn(nullable: false)]
     private ?Service $service = null;
 
-    #[ORM\ManyToOne(inversedBy: 'items')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?CustomerOrder $customer_order = null;
-
     #[ORM\Column]
     private ?float $price_service = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $multiplier_price = null;
+
+    /**
+     * @var Collection<int, CustomerOrderItem>
+     */
+    #[ORM\OneToMany(targetEntity: CustomerOrderItem::class, mappedBy: 'Item')]
+    private Collection $customerOrderItems;
+
+    #[ORM\Column]
+    private ?int $quantity = null;
+
+    public function __construct()
+    {
+        $this->customerOrderItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,18 +124,6 @@ class Item
         return $this;
     }
 
-    public function getCustomerOrder(): ?CustomerOrder
-    {
-        return $this->customer_order;
-    }
-
-    public function setCustomerOrder(?CustomerOrder $customer_order): static
-    {
-        $this->customer_order = $customer_order;
-
-        return $this;
-    }
-
     public function getPriceService(): ?float
     {
         return $this->price_service;
@@ -144,6 +144,48 @@ class Item
     public function setMultiplierPrice(?float $multiplier_price): static
     {
         $this->multiplier_price = $multiplier_price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CustomerOrderItem>
+     */
+    public function getCustomerOrderItems(): Collection
+    {
+        return $this->customerOrderItems;
+    }
+
+    public function addCustomerOrderItem(CustomerOrderItem $customerOrderItem): static
+    {
+        if (!$this->customerOrderItems->contains($customerOrderItem)) {
+            $this->customerOrderItems->add($customerOrderItem);
+            $customerOrderItem->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomerOrderItem(CustomerOrderItem $customerOrderItem): static
+    {
+        if ($this->customerOrderItems->removeElement($customerOrderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($customerOrderItem->getItem() === $this) {
+                $customerOrderItem->setItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

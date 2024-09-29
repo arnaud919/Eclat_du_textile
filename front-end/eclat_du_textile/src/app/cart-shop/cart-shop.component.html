@@ -1,1 +1,72 @@
-<p>cart-shop works!</p>
+<!-- Étape 1: Affichage du panier -->
+<div *ngIf="currentStep === 1">
+  <h3>Votre Panier</h3>
+  <div *ngIf="panier.length === 0">Votre panier est vide.</div>
+  <div *ngIf="panier.length > 0">
+    <div *ngFor="let item of panier">
+      <p><strong>Service :</strong> {{ item.serviceName }}</p>
+      <p><strong>Vêtement :</strong> {{ item.clothName }}</p>
+      <p><strong>Prix total :</strong> {{ item.totalPrice | number:'1.0-2' }} €</p>
+      <hr>
+    </div>
+  </div>
+  <div *ngIf="totalPrice > 0">
+    <h3>Prix total : {{ totalPrice | number:'1.0-2' }} €</h3>
+  </div>
+  <button (click)="nextStep()">Continuer</button>
+</div>
+
+<!-- Étape 2: Coordonnées -->
+<div *ngIf="currentStep === 2">
+  <h3>Coordonnées</h3>
+  <form [formGroup]="coordinatesForm" (ngSubmit)="saveCoordinates()">
+    <label for="address">Adresse</label>
+    <input id="address" formControlName="address" placeholder="Votre adresse" />
+    <div *ngIf="coordinatesForm.get('address')?.invalid && coordinatesForm.get('address')?.touched">
+      Adresse requise
+    </div>
+
+    <label for="phone">Téléphone</label>
+    <input id="phone" formControlName="phone" placeholder="Votre numéro de téléphone" />
+    <div *ngIf="coordinatesForm.get('phone')?.invalid && coordinatesForm.get('phone')?.touched">
+      Téléphone requis
+    </div>
+
+    <button type="button" (click)="previousStep()">Retour</button>
+    <button type="submit">Continuer vers le paiement</button>
+  </form>
+</div>
+
+<!-- Étape 3: Paiement -->
+<div *ngIf="currentStep === 3">
+  <h3>Paiement</h3>
+  <form [formGroup]="paymentForm" (ngSubmit)="savePayment()">
+    <label for="cardNumber">Numéro de carte</label>
+    <input id="cardNumber" formControlName="cardNumber" placeholder="Votre numéro de carte" />
+    <div *ngIf="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
+      Numéro de carte invalide
+    </div>
+
+    <label for="expirationDate">Date d'expiration</label>
+    <input id="expirationDate" formControlName="expirationDate" placeholder="MM/AA" />
+    <div *ngIf="paymentForm.get('expirationDate')?.invalid && paymentForm.get('expirationDate')?.touched">
+      Date d'expiration requise
+    </div>
+
+    <label for="cvv">CVV</label>
+    <input id="cvv" formControlName="cvv" placeholder="Votre CVV" />
+    <div *ngIf="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
+      CVV requis
+    </div>
+
+    <button type="button" (click)="previousStep()">Retour</button>
+    <button type="submit">Confirmer la commande</button>
+  </form>
+</div>
+
+<!-- Étape 4: Validation -->
+<div *ngIf="currentStep === 4">
+  <h3>Commande confirmée !</h3>
+  <p>Votre commande a été passée avec succès.</p>
+  <button (click)="goToProfile()">Retour au profil</button>
+</div>

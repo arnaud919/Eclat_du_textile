@@ -19,7 +19,6 @@
               </div>
               
 
-
             <div class="options">
                 <label for="material">Type de matériau</label>
                 <select formControlName="material" name="material" id="material">
@@ -47,6 +46,12 @@
                 <div *ngIf="itemForm.get('color')?.invalid && itemForm.get('color')?.touched">
                     Champs requis
                 </div>
+            </div>
+
+            <label for="quantity">Quantité</label>
+            <input id="quantity" formControlName="quantity" type="number" min="1" value="1">
+            <div *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched">
+              La quantité est obligatoire.
             </div>
 
 
@@ -77,7 +82,7 @@
                   
                     <!-- Si un article est sélectionné, on affiche le prix multiplié par le multiplicateur -->
                     <span *ngIf="selectedArticle">
-                      {{ selectedArticle.multiplier_price | number:'1.0-2' }} €
+                      {{ selectedArticle.multiplier_price * ServiceProvisionResponseItemData.price_service | number:'1.0-2' }} €
                     </span>
                   
                     <!-- Si aucun article n'est sélectionné, ne rien afficher -->

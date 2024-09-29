@@ -36,6 +36,7 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     cloth: new FormControl('', Validators.required),
     material: new FormControl('', Validators.required),
     color: new FormControl('', Validators.required),
+    quantity: new FormControl(1, [Validators.required, Validators.min(1)])  // Ajout du champ quantité avec une validation minimale de 1
   });
 
   constructor(
@@ -44,7 +45,7 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     private TypeMaterialResponseService: TypeMaterialService,
     private ColorResponseService: ColorService,
     private route: ActivatedRoute,
-    private formDataService: FormDataServiceService
+    private formDataService: FormDataServiceService,
   ) {}
 
   ngOnInit(): void {
@@ -52,9 +53,9 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     this.loadCategoryData(); // Charger toutes les catégories, types et couleurs
     this.loadFormData();
 
-    // Sauvegarder dans le localStorage chaque fois que le formulaire change
+    // Sauvegarder dans le sessionStorage chaque fois que le formulaire change
     this.itemForm.valueChanges.subscribe(() => {
-      this.saveToLocalStorage();
+      this.saveToSessionStorage();
     });
   }
 
@@ -64,64 +65,54 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     this.allColor();
   }
 
-  addItem() {
-    if (this.itemForm.valid && this.selectedArticle) {
-      // Débogage : Afficher toutes les données à sauvegarder avant l'appel de saveFormData
-      console.log('Formulaire soumis avec succès');
-      console.log('Vêtement sélectionné :', this.selectedArticle.name_category_article);
+  addItem(): void {
+    if (this.itemForm.valid && this.selectedArticle && this.ServiceProvisionResponseItemData) {
+      const formData = this.itemForm.value;
   
-      // Sauvegarder les données dans le localStorage
-      this.saveFormData(); 
+      const basePrice = this.ServiceProvisionResponseItemData.price_service;
+      const multiplier = this.selectedArticle.multiplier_price || 1;
+      const totalPrice = basePrice * multiplier; // Arrondi à deux chiffres après la virgule
   
-      // Afficher un message de confirmation
-      console.log('Données sauvegardées avec succès.');
-    } else {
-      console.error('Le formulaire est invalide ou aucun vêtement n\'est sélectionné.');
-    }
-  }
-  
-
-  private saveFormData(): void {
-    const formData = this.itemForm.value;  // Récupérer les données du formulaire
-  
-    // Vérifier que selectedArticle est bien défini
-    if (this.selectedArticle && this.ServiceProvisionResponseItemData) {
-      // Récupérer les données existantes dans le localStorage ou initialiser un tableau vide
-      let existingData = JSON.parse(localStorage.getItem('serviceProvisionData') || '[]');
-  
-      if (!Array.isArray(existingData)) {
-        existingData = [];  // Initialiser un tableau vide si ce n'est pas un tableau
-      }
-  
-      // Créer un nouvel objet avec les informations du formulaire, du service et du prix total
-      const newEntry = {
-        serviceName: this.ServiceProvisionResponseItemData.name_service,  // Nom du service
-        clothId: this.selectedArticle.id,  // ID du vêtement
-        clothName: this.selectedArticle.name_category_article,  // Nom du vêtement
-        totalPrice: this.ServiceProvisionResponseItemData.price_service * this.selectedArticle.multiplier_price,  // Prix total
-        ...formData  // Ajouter les autres données du formulaire (matériau, couleur, etc.)
+      const newItem = {
+        serviceName: this.ServiceProvisionResponseItemData.name_service,
+        clothName: this.selectedArticle.name_category_article,
+        multiplier: multiplier,
+        basePrice: basePrice,
+        material: formData.material,
+        color: formData.color,
+        quantity: formData.quantity || 1,  // Ajout de la quantité
+        totalPrice: totalPrice,
       };
   
-      // Ajouter la nouvelle entrée au tableau
-      existingData.push(newEntry);
+      // Charger les données existantes
+      let existingData = this.formDataService.getFormData() || [];
   
-      // Sauvegarder les données mises à jour dans le localStorage
-      localStorage.setItem('serviceProvisionData', JSON.stringify(existingData));
+      // S'assurer que les données existantes sont bien un tableau
+      if (!Array.isArray(existingData)) {
+        existingData = [];
+      }
   
-      // Débogage : Vérifier que toutes les données sont bien sauvegardées
-      console.log('Données sauvegardées dans le localStorage :', existingData);
+      existingData.push(newItem);
+  
+      // Sauvegarder les articles mis à jour dans le sessionStorage via le service
+      this.formDataService.setFormData(existingData);
+  
+      console.log('Article ajouté au panier et sauvegardé :', newItem);
     } else {
-      console.error('Erreur : Vêtement ou service manquant.');
+      console.error('Formulaire invalide ou données manquantes.');
     }
   }
   
-
-  // Charger les valeurs depuis le localStorage
+  
+  
+  
+  
+  // Charger les valeurs depuis le sessionStorage
   private loadFormData(): void {
     const savedData = this.formDataService.getFormData();
     if (savedData) {
       this.itemForm.patchValue(savedData); // Injecter les valeurs récupérées dans le FormGroup
-      console.log('Données récupérées du localStorage et injectées dans le formulaire:', savedData);
+      console.log('Données récupérées du sessionStorage et injectées dans le formulaire:', savedData);
     }
   }
 
@@ -173,7 +164,7 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     }
   }
 
-  private saveToLocalStorage(): void {
+  private saveToSessionStorage(): void {
     const formData = this.itemForm.value;  // Récupérer les données du formulaire
   
     // Récupérer l'article sélectionné (vêtement) en fonction de l'ID
@@ -181,8 +172,8 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     const selectedCloth = this.CategoryArticleMembers.find(article => article.id === selectedClothId);
   
     if (selectedCloth && this.ServiceProvisionResponseItemData) {
-      // Récupérer les données existantes dans le localStorage
-      let existingData = JSON.parse(localStorage.getItem('serviceProvisionData') || '[]');
+      // Récupérer les données existantes dans le sessionStorage
+      let existingData = JSON.parse(sessionStorage.getItem('serviceProvisionData') || '[]');
   
       if (!Array.isArray(existingData)) {
         existingData = [];  // Initialiser un tableau vide si nécessaire
@@ -200,17 +191,15 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
       // Ajouter la nouvelle entrée au tableau existant
       existingData.push(newEntry);
   
-      // Sauvegarder les données mises à jour dans le localStorage
-      localStorage.setItem('serviceProvisionData', JSON.stringify(existingData));
+      // Sauvegarder les données mises à jour dans le sessionStorage
+      sessionStorage.setItem('serviceProvisionData', JSON.stringify(existingData));
   
-      console.log('Données sauvegardées dans le localStorage :', existingData);  // Débogage
+      console.log('Données sauvegardées dans le sessionStorage :', existingData);  // Débogage
     } else {
       console.error('Erreur : Vêtement sélectionné ou service manquant.');
     }
   }
   
-  
-
   ngOnDestroy(): void {
     // Nettoyage des abonnements
     this.subscriptions.forEach((sub) => sub.unsubscribe());

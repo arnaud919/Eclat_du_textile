@@ -38,9 +38,19 @@ class CustomerOrder
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'customer_order')]
     private Collection $items;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status_customer_order = null;
+
+    /**
+     * @var Collection<int, CustomerOrderItem>
+     */
+    #[ORM\OneToMany(targetEntity: CustomerOrderItem::class, mappedBy: 'customer_order')]
+    private Collection $customerOrderItems;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->customerOrderItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,30 +94,42 @@ class CustomerOrder
         return $this;
     }
 
-    /**
-     * @return Collection<int, Item>
-     */
-    public function getItems(): Collection
+    public function getStatusCustomerOrder(): ?string
     {
-        return $this->items;
+        return $this->status_customer_order;
     }
 
-    public function addItem(Item $item): static
+    public function setStatusCustomerOrder(?string $status_customer_order): static
     {
-        if (!$this->items->contains($item)) {
-            $this->items->add($item);
-            $item->setCustomerOrder($this);
+        $this->status_customer_order = $status_customer_order;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CustomerOrderItem>
+     */
+    public function getCustomerOrderItems(): Collection
+    {
+        return $this->customerOrderItems;
+    }
+
+    public function addCustomerOrderItem(CustomerOrderItem $customerOrderItem): static
+    {
+        if (!$this->customerOrderItems->contains($customerOrderItem)) {
+            $this->customerOrderItems->add($customerOrderItem);
+            $customerOrderItem->setCustomerOrder($this);
         }
 
         return $this;
     }
 
-    public function removeItem(Item $item): static
+    public function removeCustomerOrderItem(CustomerOrderItem $customerOrderItem): static
     {
-        if ($this->items->removeElement($item)) {
+        if ($this->customerOrderItems->removeElement($customerOrderItem)) {
             // set the owning side to null (unless already changed)
-            if ($item->getCustomerOrder() === $this) {
-                $item->setCustomerOrder(null);
+            if ($customerOrderItem->getCustomerOrder() === $this) {
+                $customerOrderItem->setCustomerOrder(null);
             }
         }
 
