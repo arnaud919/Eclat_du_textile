@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\Controller\EventSubscriber;
 
 use App\Entity\User;
 use Doctrine\Common\EventSubscriber;
