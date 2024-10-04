@@ -6,7 +6,7 @@
 parameters:
 
 services:
-    App\Controller\EventSubscriber\HashUserPasswordSubscriber:
+    App\Controller\UserSubscriber\HashUserPasswordSubscriber:
         tags:
             - { name: 'doctrine.event_subscriber' }
     # default configuration for services in *this* file
