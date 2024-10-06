@@ -19,6 +19,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['userList']],
 )]
 
+#[ORM\InheritanceType('JOINED')] // Stratégie d'héritage
+#[ORM\DiscriminatorColumn(name: 'user_type', type: 'string')] // Colonne pour discriminer les types d'utilisateurs
+#[ORM\DiscriminatorMap(['customer' => Customer::class, 'employee' => Employee::class])] // Map les classes enfants
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -41,42 +45,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Gender $gender_user = null;
-
     #[ORM\Column(length: 255)]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $last_name = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $birthday_date = null;
-
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Nationality $nationality_employee = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $adress_employee = null;
-
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?PostalCode $postal_code_employee = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $phone = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $hiring_date_employee = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $employment_end_date_employee = null;
-
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Job $job = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $customer_inscription_date = null;
 
     /**
      * @var Collection<int, CustomerOrder>
@@ -163,18 +139,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getGenderUser(): ?Gender
-    {
-        return $this->gender_user;
-    }
-
-    public function setGenderUser(?Gender $gender_user): static
-    {
-        $this->gender_user = $gender_user;
-
-        return $this;
-    }
-
     public function getFirstName(): ?string
     {
         return $this->first_name;
@@ -199,54 +163,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getBirthdayDate(): ?\DateTimeInterface
-    {
-        return $this->birthday_date;
-    }
-
-    public function setBirthdayDate(?\DateTimeInterface $birthday_date): static
-    {
-        $this->birthday_date = $birthday_date;
-
-        return $this;
-    }
-
-    public function getNationalityEmployee(): ?Nationality
-    {
-        return $this->nationality_employee;
-    }
-
-    public function setNationalityEmployee(?Nationality $nationality_employee): static
-    {
-        $this->nationality_employee = $nationality_employee;
-
-        return $this;
-    }
-
-    public function getAdressEmployee(): ?string
-    {
-        return $this->adress_employee;
-    }
-
-    public function setAdressEmployee(?string $adress_employee): static
-    {
-        $this->adress_employee = $adress_employee;
-
-        return $this;
-    }
-
-    public function getPostalCodeEmployee(): ?PostalCode
-    {
-        return $this->postal_code_employee;
-    }
-
-    public function setPostalCodeEmployee(?PostalCode $postal_code_employee): static
-    {
-        $this->postal_code_employee = $postal_code_employee;
-
-        return $this;
-    }
-
     public function getPhone(): ?string
     {
         return $this->phone;
@@ -255,54 +171,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getHiringDateEmployee(): ?\DateTimeInterface
-    {
-        return $this->hiring_date_employee;
-    }
-
-    public function setHiringDateEmployee(?\DateTimeInterface $hiring_date_employee): static
-    {
-        $this->hiring_date_employee = $hiring_date_employee;
-
-        return $this;
-    }
-
-    public function getEmploymentEndDateEmployee(): ?\DateTimeInterface
-    {
-        return $this->employment_end_date_employee;
-    }
-
-    public function setEmploymentEndDateEmployee(?\DateTimeInterface $employment_end_date_employee): static
-    {
-        $this->employment_end_date_employee = $employment_end_date_employee;
-
-        return $this;
-    }
-
-    public function getJob(): ?Job
-    {
-        return $this->job;
-    }
-
-    public function setJob(?Job $job): static
-    {
-        $this->job = $job;
-
-        return $this;
-    }
-
-    public function getCustomerInscriptionDate(): ?\DateTimeInterface
-    {
-        return $this->customer_inscription_date;
-    }
-
-    public function setCustomerInscriptionDate(?\DateTimeInterface $customer_inscription_date): static
-    {
-        $this->customer_inscription_date = $customer_inscription_date;
 
         return $this;
     }

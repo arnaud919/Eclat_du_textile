@@ -2,20 +2,18 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\User;
+use App\Entity\Service;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class UserCrudController extends AbstractCrudController
+class ServiceCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return User::class;
+        return Service::class;
     }
 
     
@@ -24,11 +22,11 @@ class UserCrudController extends AbstractCrudController
         return [
             yield IdField::new('id')
                 ->onlyOnIndex(),
-            yield EmailField::new('email'),
-            yield TextField::new('first_name'),
-            yield TextField::new('last_name'),
-            yield ArrayField::new('roles'),
-            yield TextField::new('phone'),
+            yield TextField::new('name_service'),
+            yield NumberField::new('price_service'),
+            yield TextField::new('description'),
+            yield TextField::new('image_service'),
         ];
-    }   
+    }
+    
 }

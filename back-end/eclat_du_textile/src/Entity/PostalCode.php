@@ -19,14 +19,14 @@ class PostalCode
     private ?int $postal_code = null;
 
     /**
-     * @var Collection<int, User>
+     * @var Collection<int, Employee>
      */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'postal_code_employee')]
-    private Collection $users;
+    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'job')]
+    private Collection $employees;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->employees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,29 +47,29 @@ class PostalCode
     }
 
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, Employee>
      */
-    public function getUsers(): Collection
+    public function getEmployees(): Collection
     {
-        return $this->users;
+        return $this->employees;
     }
 
-    public function addUser(User $user): static
+    public function addEmployee(Employee $employee): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setPostalCodeEmployee($this);
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setJob($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeEmployee(Employee $employee): static
     {
-        if ($this->users->removeElement($user)) {
+        if ($this->employees->removeElement($employee)) {
             // set the owning side to null (unless already changed)
-            if ($user->getPostalCodeEmployee() === $this) {
-                $user->setPostalCodeEmployee(null);
+            if ($employee->getJob() === $this) {
+                $employee->setJob(null);
             }
         }
 

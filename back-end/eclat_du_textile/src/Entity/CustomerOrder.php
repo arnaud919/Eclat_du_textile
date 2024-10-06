@@ -32,12 +32,6 @@ class CustomerOrder
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $end_date_order = null;
 
-    /**
-     * @var Collection<int, Item>
-     */
-    #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'customer_order')]
-    private Collection $items;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status_customer_order = null;
 
@@ -49,7 +43,6 @@ class CustomerOrder
 
     public function __construct()
     {
-        $this->items = new ArrayCollection();
         $this->customerOrderItems = new ArrayCollection();
     }
 
