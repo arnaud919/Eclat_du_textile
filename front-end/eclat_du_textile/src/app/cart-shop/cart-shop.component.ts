@@ -34,9 +34,13 @@ export class CartShopComponent implements OnInit {
 
   // Initialiser les formulaires de coordonnées et de paiement
   initializeForms(): void {
+
+    const today = new Date().toISOString().split('T')[0]; 
+    
     this.coordinatesForm = new FormGroup({
       address: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.required)
+      phone: new FormControl('', Validators.required),
+      depositDate: new FormControl(today, Validators.required)
     });
 
     this.paymentForm = new FormGroup({

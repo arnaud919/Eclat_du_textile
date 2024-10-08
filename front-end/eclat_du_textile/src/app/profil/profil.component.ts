@@ -51,8 +51,6 @@ export class ProfileComponent implements OnInit {
     
     if (storedUserProfile) {
       this.userProfile = JSON.parse(storedUserProfile);  // Charger les données du profil
-    } else {
-      this.errorMessage = 'Aucune donnée de profil trouvée.';
     }
   
     // Charger le panier ou autre service si nécessaire

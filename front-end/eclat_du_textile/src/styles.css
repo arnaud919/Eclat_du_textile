@@ -34,12 +34,6 @@ header {
     background-color: #19456B;
 }
 
-footer {
-    background-color: #C5E898;
-    position: relative;
-    bottom: 0;
-}
-
 body, html {
     background-color: #F8F1F1;
     height:100%;

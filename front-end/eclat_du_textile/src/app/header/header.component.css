@@ -9,3 +9,8 @@
 li{
     align-items: center;
 }
+
+.titre{
+    text-decoration: none;
+    color: white;
+}

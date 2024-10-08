@@ -10,16 +10,12 @@
     </div>
   </div>
 </div>
+<br>
 
 <!-- Template de chargement -->
 <ng-template #loading>
   <p>Chargement des informations du profil...</p>
 </ng-template>
-
-<!-- Affichage des erreurs -->
-<div *ngIf="errorMessage" class="alert alert-danger">
-  {{ errorMessage }}
-</div>
 
 <h2>Historique des services choisis</h2>
 
@@ -28,7 +24,7 @@
 
 <!-- Si aucune donnée n'est trouvée -->
 <div *ngIf="serviceData?.length === 0">
-  <p>Aucune donnée disponible.</p>
+  <p>Votre panier est vide.</p>
 </div>
 
 <div *ngFor="let item of serviceData; let i = index">

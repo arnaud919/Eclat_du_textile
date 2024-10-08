@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
-#[Groups(["services"])]
 #[ApiResource(
     normalizationContext: ['groups' => ['services']]
 )]
@@ -20,12 +19,15 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["services"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["services"])]
     private ?string $name_service = null;
 
     #[ORM\Column]
+    #[Groups(["services"])]
     private ?float $price_service = null;
 
     /**
@@ -35,9 +37,11 @@ class Service
     private Collection $items;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["services"])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["services"])]
     private ?string $image_service = null;
 
     public function __construct()

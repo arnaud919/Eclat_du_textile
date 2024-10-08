@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ServiceProvisionResponseService } from '../shared/services/service-provision.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiListResponse, ServiceProvision, CategoryArticle, TypeMaterial, Color } from '../shared/interfaces/entities';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -46,6 +46,7 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     private ColorResponseService: ColorService,
     private route: ActivatedRoute,
     private formDataService: FormDataServiceService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +72,7 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
   
       const basePrice = this.ServiceProvisionResponseItemData.price_service;
       const multiplier = this.selectedArticle.multiplier_price || 1;
-      const totalPrice = basePrice * multiplier; // Arrondi à deux chiffres après la virgule
+      const totalPrice = basePrice * multiplier;
   
       const newItem = {
         serviceName: this.ServiceProvisionResponseItemData.name_service,
@@ -80,7 +81,7 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
         basePrice: basePrice,
         material: formData.material,
         color: formData.color,
-        quantity: formData.quantity || 1,  // Ajout de la quantité
+        quantity: formData.quantity || 1,
         totalPrice: totalPrice,
       };
   
@@ -96,10 +97,8 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
   
       // Sauvegarder les articles mis à jour dans le sessionStorage via le service
       this.formDataService.setFormData(existingData);
-  
-      console.log('Article ajouté au panier et sauvegardé :', newItem);
-    } else {
-      console.error('Formulaire invalide ou données manquantes.');
+
+      this.router.navigate(['/nos_prestations']);
     }
   }
   
@@ -195,8 +194,6 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
       sessionStorage.setItem('serviceProvisionData', JSON.stringify(existingData));
   
       console.log('Données sauvegardées dans le sessionStorage :', existingData);  // Débogage
-    } else {
-      console.error('Erreur : Vêtement sélectionné ou service manquant.');
     }
   }
   

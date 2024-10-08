@@ -20,16 +20,29 @@
 <div *ngIf="currentStep === 2">
   <h3>Coordonnées</h3>
   <form [formGroup]="coordinatesForm" (ngSubmit)="saveCoordinates()">
-    <label for="address">Adresse</label>
-    <input id="address" formControlName="address" placeholder="Votre adresse" />
-    <div *ngIf="coordinatesForm.get('address')?.invalid && coordinatesForm.get('address')?.touched">
-      Adresse requise
+    <div>
+      <label for="address">Adresse</label>
+      <input id="address" formControlName="address" placeholder="Votre adresse" />
+      <div *ngIf="coordinatesForm.get('address')?.invalid && coordinatesForm.get('address')?.touched">
+        Adresse requise
+      </div>
     </div>
 
-    <label for="phone">Téléphone</label>
-    <input id="phone" formControlName="phone" placeholder="Votre numéro de téléphone" />
-    <div *ngIf="coordinatesForm.get('phone')?.invalid && coordinatesForm.get('phone')?.touched">
-      Téléphone requis
+    <div>
+      <label for="phone">Téléphone</label>
+      <input id="phone" formControlName="phone" placeholder="Votre numéro de téléphone" />
+      <div *ngIf="coordinatesForm.get('phone')?.invalid && coordinatesForm.get('phone')?.touched">
+        Téléphone requis
+      </div>
+    </div>
+
+    <!-- Champ pour la date de dépôt -->
+    <div>
+      <label for="depositDate">Date de dépôt</label>
+      <input type="date" id="depositDate" formControlName="depositDate" />
+      <div *ngIf="coordinatesForm.get('depositDate')?.invalid && coordinatesForm.get('depositDate')?.touched">
+        Date de dépôt requise
+      </div>
     </div>
 
     <button type="button" (click)="previousStep()">Retour</button>
@@ -37,26 +50,37 @@
   </form>
 </div>
 
+
 <!-- Étape 3: Paiement -->
 <div *ngIf="currentStep === 3">
   <h3>Paiement</h3>
   <form [formGroup]="paymentForm" (ngSubmit)="savePayment()">
-    <label for="cardNumber">Numéro de carte</label>
-    <input id="cardNumber" formControlName="cardNumber" placeholder="Votre numéro de carte" />
-    <div *ngIf="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
-      Numéro de carte invalide
+    <div>
+
+      <label for="cardNumber">Numéro de carte</label>
+      <input id="cardNumber" formControlName="cardNumber" placeholder="Votre numéro de carte" />
+      <div *ngIf="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched">
+        Numéro de carte invalide
+      </div>
     </div>
 
-    <label for="expirationDate">Date d'expiration</label>
-    <input id="expirationDate" formControlName="expirationDate" placeholder="MM/AA" />
-    <div *ngIf="paymentForm.get('expirationDate')?.invalid && paymentForm.get('expirationDate')?.touched">
-      Date d'expiration requise
+    <div>
+
+
+      <label for="expirationDate">Date d'expiration</label>
+      <input id="expirationDate" formControlName="expirationDate" placeholder="MM/AA" />
+      <div *ngIf="paymentForm.get('expirationDate')?.invalid && paymentForm.get('expirationDate')?.touched">
+        Date d'expiration requise
+      </div>
     </div>
 
-    <label for="cvv">CVV</label>
-    <input id="cvv" formControlName="cvv" placeholder="Votre CVV" />
-    <div *ngIf="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
-      CVV requis
+    <div>
+
+      <label for="cvv">CVV</label>
+      <input id="cvv" formControlName="cvv" placeholder="Votre CVV" />
+      <div *ngIf="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched">
+        CVV requis
+      </div>
     </div>
 
     <button type="button" (click)="previousStep()">Retour</button>
