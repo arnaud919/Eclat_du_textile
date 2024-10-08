@@ -1,18 +1,22 @@
 <div class="login-container">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div formGroupName="credentials">
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email">
-      <div *ngIf="loginForm.get('credentials.email')?.invalid && loginForm.get('credentials.email')?.touched">
-        <p *ngIf="loginForm.get('credentials.email')?.errors?.['required']">L'email est requis.</p>
-        <p *ngIf="loginForm.get('credentials.email')?.errors?.['email']">Email invalide.</p>
+    <div formGroupName="credentials" class="login">
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email">
+        <div *ngIf="loginForm.get('credentials.email')?.invalid && loginForm.get('credentials.email')?.touched">
+          <p *ngIf="loginForm.get('credentials.email')?.errors?.['required']">L'email est requis.</p>
+          <p *ngIf="loginForm.get('credentials.email')?.errors?.['email']">Email invalide.</p>
+        </div>
       </div>
 
-      <label for="password">Mot de passe</label>
-      <input id="password" type="password" formControlName="password">
-      <div *ngIf="loginForm.get('credentials.password')?.invalid && loginForm.get('credentials.password')?.touched">
-        <p *ngIf="loginForm.get('credentials.password')?.errors?.['required']">Le mot de passe est requis.</p>
-        <p *ngIf="loginForm.get('credentials.password')?.errors?.['minlength']">Le mot de passe doit comporter au moins 5 caractères.</p>
+      <div>
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" formControlName="password">
+        <div *ngIf="loginForm.get('credentials.password')?.invalid && loginForm.get('credentials.password')?.touched">
+          <p *ngIf="loginForm.get('credentials.password')?.errors?.['required']">Le mot de passe est requis.</p>
+          <p *ngIf="loginForm.get('credentials.password')?.errors?.['minlength']">Le mot de passe doit comporter au moins 5 caractères.</p>
+        </div>
       </div>
     </div>
 

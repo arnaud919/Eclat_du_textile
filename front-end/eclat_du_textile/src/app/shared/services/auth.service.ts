@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
 import { jwtDecode } from "jwt-decode";
-
 
 export interface Token {
   token: string;
@@ -17,6 +16,16 @@ export class AuthService {
   private url = environment.apiURL;
 
   constructor(private http: HttpClient, private router: Router) { }
+
+  // Méthode pour inscrire un utilisateur
+  registerUser(userData: any): Observable<any> {
+    const url = `${this.url}api/customers`;  // Endpoint d'inscription
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    
+    return this.http.post<any>(url, userData, { headers });
+  }
 
   // Méthode de login pour envoyer les informations de connexion et récupérer le token JWT
   login(credentials: { email: string; password: string }): Observable<Token> {
@@ -31,14 +40,14 @@ export class AuthService {
   // Vérifier si l'utilisateur est connecté
   isLogged(): boolean {
     const token = sessionStorage.getItem('token');
-    return !!token;  // Retourne true si un token est présent
+    return !!token;
   }
 
-  // Vérifier si l'utilisateur est un admin en décodant le token JWT
+  // Vérifier si l'utilisateur est admin
   isAdmin(): boolean {
     const token = sessionStorage.getItem('token');
     if (token) {
-      const decodedToken: any = jwtDecode(token);  // Utilise 'jwt_decode' pour décoder le token
+      const decodedToken: any = jwtDecode(token);
       return decodedToken.roles && decodedToken.roles.includes('ROLE_ADMIN');
     }
     return false;
@@ -49,18 +58,17 @@ export class AuthService {
     return sessionStorage.getItem('token');
   }
 
-  // Déconnecter l'utilisateur (supprimer le token et rediriger vers la page de login)
+  // Déconnecter l'utilisateur
   logout(): void {
     sessionStorage.removeItem('token');
-    sessionStorage.removeItem('serviceProvisionData');  // Supprimer les données liées à la commande ou aux services
-    this.router.navigate(['login']);  // Rediriger vers la page de login
+    this.router.navigate(['login']);
   }
 
-  // Méthode pour décoder le token JWT et obtenir les informations utilisateur
+  // Décoder le token JWT
   getDecodedToken(): any {
     const token = this.getToken();
     if (token) {
-      return jwtDecode(token);  // Utilise 'jwt_decode' pour décoder le token
+      return jwtDecode(token);
     }
     return null;
   }

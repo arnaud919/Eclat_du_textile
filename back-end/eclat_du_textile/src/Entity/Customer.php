@@ -8,22 +8,24 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Customer extends User
 {
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_inscription_customer = null;
 
-
     public function getDateInscriptionCustomer(): ?\DateTimeInterface
     {
         return $this->date_inscription_customer;
     }
 
-    public function setDateInscriptionCustomer(\DateTimeInterface $date_inscription_customer): static
+    #[ORM\PrePersist]
+    public function setDateInscriptionCustomer(): void
     {
-        $this->date_inscription_customer = $date_inscription_customer;
-
-        return $this;
+        // Ici, vous définissez la date d'inscription à la date actuelle si elle n'est pas déjà définie
+        if ($this->date_inscription_customer === null) {
+            $this->date_inscription_customer = new \DateTime();  // Utilise la date actuelle
+        }
     }
 }

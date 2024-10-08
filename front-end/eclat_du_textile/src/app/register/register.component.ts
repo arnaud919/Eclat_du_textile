@@ -1,40 +1,48 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../shared/services/auth.service';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RegisterService } from '../shared/services/register.service';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css'],
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
+  RegisterForm!: FormGroup;
 
-  service = inject(RegisterService)
-  public RegisterForm:FormGroup = new FormGroup ({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    first_name: new FormControl(''),
-    last_name: new FormControl('')
-  })
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit() {
+  ngOnInit(): void {
+    this.RegisterForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      first_name: new FormControl('', Validators.required),
+      last_name: new FormControl('', Validators.required)
+    });
+  }
+
+  onSubmit(): void {
     if (this.RegisterForm.valid) {
-      this.service.register(this.RegisterForm.value).subscribe({
+      const userData = {
+        ...this.RegisterForm.value,
+        user_type: 'customer'
+      };
+
+      this.authService.registerUser(userData).subscribe({
         next: (response) => {
           console.log('Inscription réussie', response);
-          console.log(this.RegisterForm.value);
+          this.router.navigate(['/login']);
         },
         error: (error) => {
-          console.error('Erreur inscription', error);
-          console.log(this.RegisterForm.value);
+          console.error('Erreur lors de l\'inscription', error);
         }
       });
     } else {
       console.log('Formulaire invalide');
     }
   }
-
 }
