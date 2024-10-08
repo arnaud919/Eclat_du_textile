@@ -1,23 +1,25 @@
 <section *ngIf="ServiceProvisionResponseItemData" class="container">
-    
+
     <a class="back" routerLink="/nos_prestations">Retour</a>
 
     <div class="row justify-content-center gap-2 d-flex align-item-center service_provision_item_container">
-        <form [formGroup]="itemForm" (ngSubmit)="addItem()" class="col-md-5 col-xs-12 order-sm-2 order-md-0 service_provision_item_select">
+        <form [formGroup]="itemForm" (ngSubmit)="addItem()"
+            class="col-md-5 col-xs-12 order-sm-2 order-md-0 service_provision_item_select">
 
             <div class="options">
                 <label for="cloth">Vêtements</label>
                 <select formControlName="cloth" name="cloth" id="cloth" (change)="onArticleSelect($event)" required>
-                  <option value="">--Sélectionner votre vêtement--</option>
-                  <option *ngFor="let categoryArticle of CategoryArticleMembers | isSubArticle;" [value]="categoryArticle.id">
-                    {{categoryArticle.name_category_article}}
-                  </option>
+                    <option value="">--Sélectionner votre vêtement--</option>
+                    <option *ngFor="let categoryArticle of CategoryArticleMembers | isSubArticle;"
+                        [value]="categoryArticle.id">
+                        {{categoryArticle.name_category_article}}
+                    </option>
                 </select>
                 <div *ngIf="itemForm.get('cloth')?.invalid && itemForm.get('cloth')?.touched">
-                  Champs requis
+                    Champs requis
                 </div>
-              </div>
-              
+            </div>
+
 
             <div class="options">
                 <label for="material">Type de matériau</label>
@@ -48,10 +50,12 @@
                 </div>
             </div>
 
-            <label for="quantity">Quantité</label>
-            <input id="quantity" formControlName="quantity" type="number" min="1" value="1">
-            <div *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched">
-              La quantité est obligatoire.
+            <div class="options">
+                <label for="quantity">Quantité</label>
+                <input id="quantity" formControlName="quantity" type="number" min="1" value="1">
+                <div *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched">
+                    La quantité est obligatoire.
+                </div>
             </div>
 
 
@@ -79,17 +83,18 @@
                 </div>
                 <div class="d-flex justify-content-evenly">
                     <span>Prix :</span>
-                  
+
                     <!-- Si un article est sélectionné, on affiche le prix multiplié par le multiplicateur -->
                     <span *ngIf="selectedArticle">
-                      {{ selectedArticle.multiplier_price * ServiceProvisionResponseItemData.price_service | number:'1.0-2' }} €
+                        {{ selectedArticle.multiplier_price * ServiceProvisionResponseItemData.price_service |
+                        number:'1.0-2' }} €
                     </span>
-                  
+
                     <!-- Si aucun article n'est sélectionné, ne rien afficher -->
                     <span *ngIf="!selectedArticle">
-                      Sélectionnez un article pour voir le prix.
+                        Sélectionnez un article pour voir le prix.
                     </span>
-                  </div>
+                </div>
             </div>
         </div>
     </div>
