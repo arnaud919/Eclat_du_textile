@@ -1,28 +1,42 @@
 <div class="login-container">
+  <div class="user_connection">
 
-  <h1>Se connecter</h1>
+  <h1 class="page_title">Se connecter</h1>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div formGroupName="credentials" class="login">
-      <div>
-        <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email">
-        <div *ngIf="loginForm.get('credentials.email')?.invalid && loginForm.get('credentials.email')?.touched">
+    <div formGroupName="credentials">
+      <div class="field_user_connection">
+        <div class="field_user_input">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email">
+        </div>
+        <div class="required_filed" *ngIf="loginForm.get('credentials.email')?.invalid && loginForm.get('credentials.email')?.touched">
           <p *ngIf="loginForm.get('credentials.email')?.errors?.['required']">L'email est requis.</p>
           <p *ngIf="loginForm.get('credentials.email')?.errors?.['email']">Email invalide.</p>
         </div>
       </div>
 
-      <div>
-        <label for="password">Mot de passe</label>
-        <input id="password" type="password" formControlName="password">
-        <div *ngIf="loginForm.get('credentials.password')?.invalid && loginForm.get('credentials.password')?.touched">
+      <div class="field_user_connection">
+        <div class="field_user_input">
+          <label for="password">Mot de passe</label>
+          <input id="password" type="password" formControlName="password">
+        </div>
+        <div class="required_filed" *ngIf="loginForm.get('credentials.password')?.invalid && loginForm.get('credentials.password')?.touched">
           <p *ngIf="loginForm.get('credentials.password')?.errors?.['required']">Le mot de passe est requis.</p>
-          <p *ngIf="loginForm.get('credentials.password')?.errors?.['minlength']">Le mot de passe doit comporter au moins 5 caractères.</p>
         </div>
       </div>
     </div>
 
-    <button type="submit" [disabled]="loginForm.invalid">Se connecter</button>
+    <button type="submit" 
+      [disabled]="loginForm.invalid"
+      [ngClass]="{'button': loginForm.valid, 'disabled_button': loginForm.invalid}">
+      Se connecter
+    </button>
+
+    <div class="link_connection">
+      <a routerLink="/register">Pas de compte ? Inscrivez-vous dès maintenant.</a>
+    </div>
   </form>
+
+  </div>
 </div>
