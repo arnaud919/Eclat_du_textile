@@ -7,7 +7,6 @@ use App\Entity\Employee;
 use App\Entity\Customer;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -22,16 +21,15 @@ class AppFixtures extends Fixture
 
         $faker = \Faker\Factory::create("fr_FR");
 
-        $user = new User();
         $employee = new Employee();
 
         $employee->setEmail("arnaudadmin@mail.com")
         ->setRoles(["ROLE_ADMIN"])
-        ->setPassword($this->hasher->hashPassword($user, "admin"))
+        //->setPassword($this->hasher->hashPassword($user, "admin"))
         ->setFirstName("Arnaud")
         ->setLastName("Colombe")
         ->setPhone("0715489625")
-        ->setHiringDateEmployee(\DateTime::createFromFormat('Y-m-d', date('Y-m-d')))
+        ->setHiringDate(\DateTime::createFromFormat('Y-m-d', date('Y-m-d')))
         ->setAdressEmployee("1 Rue Emploi")
         ->setPostalCode('69000');
 
@@ -44,7 +42,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i<$count; $i++){
             $multiple_customer = new Customer();
             $multiple_customer->setEmail($faker->email());
-            $multiple_customer->setPassword($this->hasher->hashPassword($multiple_customer, $faker->password(10)));
+            //$multiple_customer->setPassword($this->hasher->hashPassword($multiple_customer, $faker->password(10)));
             $multiple_customer->setFirstName($faker->firstName());
             $multiple_customer->setLastName($faker->lastName());
             $multiple_customer->setPhone($faker->e164PhoneNumber());
