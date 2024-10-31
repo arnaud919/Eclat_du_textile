@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryArticleRepository::class)]
-#[Groups(["categoryarticle"])]
 #[ApiResource(
     normalizationContext: ['groups' => ['categoryarticle']]
 )]
@@ -19,9 +18,11 @@ class CategoryArticle
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["categoryarticle"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, options: ["unsigned" => true])]
+    #[Groups(["categoryarticle"])]
     private ?string $name_category_article = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'categoryArticles')]
@@ -40,6 +41,7 @@ class CategoryArticle
     private Collection $items;
 
     #[ORM\Column(nullable: true, type: 'float', options: ["unsigned" => true], columnDefinition: 'FLOAT')]
+    #[Groups(["categoryarticle"])]
     private ?float $multiplier_price = null;
 
     public function __construct()

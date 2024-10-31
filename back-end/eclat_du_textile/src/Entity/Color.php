@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ColorRepository::class)]
-#[Groups(["color"])]
 #[ApiResource(
     normalizationContext: ['groups' => ['color']]
 )]
@@ -19,9 +18,11 @@ class Color
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(options: ["unsigned" => true])]
+    #[Groups(["color"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, options: ["unsigned" => true])]
+    #[Groups(["color"])]
     private ?string $name_color = null;
 
     /**

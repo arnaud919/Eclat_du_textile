@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeMaterialRepository::class)]
-#[Groups(["typematerial"])]
+
 #[ApiResource(
     normalizationContext: ['groups' => ['typematerial']]
 )]
@@ -20,9 +20,11 @@ class TypeMaterial
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(options: ["unsigned" => true])]
+    #[Groups(["typematerial"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["typematerial"])]
     private ?string $name_type_material = null;
 
     /**

@@ -14,7 +14,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[Groups(["userList"])]
 #[ApiResource(
     normalizationContext: ['groups' => ['userList']],
 )]
@@ -28,27 +27,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(options: ["unsigned" => true])]
+    #[Groups(["userList"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["userList"])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(["userList"])]
     private array $roles = [];
 
     #[ORM\Column(length: 72)]
+    #[Groups(["userList"])]
     private ?string $password = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(["userList"])]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(["userList"])]
     private ?string $last_name = null;
 
     #[ORM\Column(length: 13, nullable: true)]
+    #[Groups(["userList"])]
     private ?string $phone = null;
 
     /**

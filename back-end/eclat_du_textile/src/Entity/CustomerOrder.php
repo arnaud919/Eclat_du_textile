@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CustomerOrderRepository::class)]
-#[Groups(["customerorder"])]
 #[ApiResource(
     normalizationContext: ['groups' => ['customerorder']]
 )]
@@ -20,6 +19,7 @@ class CustomerOrder
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(options: ["unsigned" => true])]
+    #[Groups(["customerorder"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'customerOrders')]
@@ -27,12 +27,15 @@ class CustomerOrder
     private ?User $user = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(["customerorder"])]
     private ?\DateTimeInterface $date_order = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(["customerorder"])]
     private ?\DateTimeInterface $end_date_order = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["customerorder"])]
     private ?string $status_customer_order = null;
 
     /**

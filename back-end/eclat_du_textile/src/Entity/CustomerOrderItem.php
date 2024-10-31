@@ -17,6 +17,7 @@ class CustomerOrderItem
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(options: ["unsigned" => true])]
+    #[Groups(["customerorderitem"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'customerOrderItems')]
