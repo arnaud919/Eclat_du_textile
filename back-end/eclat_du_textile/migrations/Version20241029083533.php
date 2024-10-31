@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240715195526 extends AbstractMigration
+final class Version20241029083533 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20240715195526 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE category_article ADD multiplier_price DOUBLE PRECISION NOT NULL');
-        $this->addSql('ALTER TABLE item ADD multiplier_price DOUBLE PRECISION NOT NULL');
+        $this->addSql('ALTER TABLE service CHANGE price_service price_service FLOAT, CHANGE description description TINYTEXT');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE category_article DROP multiplier_price');
-        $this->addSql('ALTER TABLE item DROP multiplier_price');
+        $this->addSql('ALTER TABLE service CHANGE price_service price_service DOUBLE PRECISION DEFAULT NULL, CHANGE description description VARCHAR(255) DEFAULT NULL');
     }
 }

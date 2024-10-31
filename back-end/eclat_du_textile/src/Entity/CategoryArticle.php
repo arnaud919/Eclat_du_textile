@@ -21,7 +21,7 @@ class CategoryArticle
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, options: ["unsigned" => true])]
     private ?string $name_category_article = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'categoryArticles')]
@@ -39,7 +39,7 @@ class CategoryArticle
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'category_article')]
     private Collection $items;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, type: 'float', options: ["unsigned" => true], columnDefinition: 'FLOAT')]
     private ?float $multiplier_price = null;
 
     public function __construct()

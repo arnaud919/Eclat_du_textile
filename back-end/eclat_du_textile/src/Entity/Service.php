@@ -21,11 +21,11 @@ class Service
     #[Groups(["services"])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, options: ["unsigned" => true])]
     #[Groups(["services"])]
     private ?string $name_service = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'float', options: ["unsigned" => true], columnDefinition: 'FLOAT')]
     #[Groups(["services"])]
     private ?float $price_service = null;
 
@@ -35,11 +35,11 @@ class Service
     #[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'service')]
     private Collection $items;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true, options: ["unsigned" => true], columnDefinition: 'TINYTEXT')]
     #[Groups(["services"])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true, options: ["unsigned" => true])]
     #[Groups(["services"])]
     private ?string $image_service = null;
 

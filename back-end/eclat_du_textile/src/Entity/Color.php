@@ -18,10 +18,10 @@ class Color
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, options: ["unsigned" => true])]
     private ?string $name_color = null;
 
     /**

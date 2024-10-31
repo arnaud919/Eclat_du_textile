@@ -17,14 +17,14 @@ class Employee extends User
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $employment_end_date = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100)]
     private ?string $adress_employee = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthday = null;
 
-    #[ORM\Column]
-    private ?int $postal_code = null;
+    #[ORM\Column(length: 9)]
+    private ?string $postal_code = null;
 
     public function getHiringDate(): ?\DateTimeInterface
     {

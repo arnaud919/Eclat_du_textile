@@ -18,7 +18,7 @@ class Item
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -39,10 +39,10 @@ class Item
     #[ORM\JoinColumn(nullable: false)]
     private ?Service $service = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
     private ?float $price_service = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, options: ["unsigned" => true])]
     private ?float $multiplier_price = null;
 
     /**
@@ -51,7 +51,7 @@ class Item
     #[ORM\OneToMany(targetEntity: CustomerOrderItem::class, mappedBy: 'Item')]
     private Collection $customerOrderItems;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
     private ?int $quantity = null;
 
     public function __construct()
