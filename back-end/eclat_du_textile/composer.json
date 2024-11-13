@@ -25,6 +25,7 @@
         "symfony/framework-bundle": "6.4.*",
         "symfony/http-kernel": "6.4.*",
         "symfony/monolog-bundle": "^3.10",
+        "symfony/password-hasher": "6.4.*",
         "symfony/property-access": "6.4.*",
         "symfony/property-info": "6.4.*",
         "symfony/runtime": "6.4.*",
@@ -87,6 +88,7 @@
         "fakerphp/faker": "^1.23",
         "symfony/maker-bundle": "^1.60",
         "symfony/stopwatch": "6.4.*",
+        "symfony/var-dumper": "6.4.*",
         "symfony/web-profiler-bundle": "6.4.*"
     }
 }

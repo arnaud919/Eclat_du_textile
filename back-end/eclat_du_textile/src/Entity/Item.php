@@ -34,6 +34,7 @@ class Item
     private ?TypeMaterial $type_material = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Color $color = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]

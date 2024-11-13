@@ -7,19 +7,34 @@ parameters:
     # default configuration for services in *this* file
 services:
 
-    App\EventListener\PasswordHasherListener:
-        tags:
-            - { name: 'doctrine.event_listener', event: 'prePersist' }
-            - { name: 'doctrine.event_listener', event: 'preUpdate' }
-        public: true
-
     _defaults:
-        public: true
+        public: false
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
+
+    # Activer l'injection automatique pour les contrôleurs
+
+    App\Processor\CustomerProcessor:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+            $passwordHasher: '@security.password_hasher'
+        tags: ['api_platform.processor']
+
+        
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+        autowire: true
+        autoconfigure: true
+
+    # Déclaration explicite de RegisterCustomerController
+    # App\Controller\RegisterCustomerController:
+    #     autowire: true
+    #     autoconfigure: true
+    #     tags: ['controller.service_arguments']
 
     App\:
         resource: '../src/*'
