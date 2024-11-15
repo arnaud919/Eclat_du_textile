@@ -15,7 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ApiResource(
-    normalizationContext: ['groups' => ['userList']],
+    normalizationContext: ['groups' => ['userWrite']],
+    denormalizationContext:['groups' => ['userRead']]
 )]
 
 #[ORM\InheritanceType('JOINED')] // Stratégie d'héritage
@@ -26,34 +27,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(options: ["unsigned" => true])]
-    #[Groups(["userList"])]
+    #[ORM\Column(options: ['unsigned' => true])]
+    #[Groups(['userWrite, userRead'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["userList"])]
+    #[Groups(['userWrite, userRead'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Groups(["userList"])]
+    #[Groups(['userWrite, userRead'])]
     private array $roles = [];
 
     #[ORM\Column(length: 72)]
+    #[Groups(['userRead'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(["userList"])]
+    #[Groups(['userWrite, userRead'])]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(["userList"])]
+    #[Groups(['userWrite, userRead'])]
     private ?string $last_name = null;
 
     #[ORM\Column(length: 13, nullable: true)]
-    #[Groups(["userList"])]
+    #[Groups(['userWrite, userRead'])]
     private ?string $phone = null;
 
     /**

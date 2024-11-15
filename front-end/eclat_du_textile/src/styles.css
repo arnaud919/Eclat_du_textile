@@ -42,7 +42,7 @@ body, html {
 .page_title {
     text-align: center;
     color: #19456B;
-    margin: 100px 0px;
+    margin: 70px 0px;
     text-decoration: underline;
 }
 
@@ -77,5 +77,70 @@ body, html {
 
     &:hover {
         border: solid #19456B 2px;
+    }
+}
+
+.user_connection{
+    margin: 50px 0;
+
+    .field_user_connection{
+        display: block;
+        margin:auto;
+        width:400px;
+
+        .required_filed{
+
+            color: red;
+        }
+
+        >*:last-child{
+            margin-bottom:30px;
+        }
+
+        .field_user_input{
+
+            *{
+                display: block;
+            }
+
+            input{
+                width: 100%;
+            }
+
+        }
+    }
+}
+
+.button{
+    border: none;
+    display: block;
+    margin: 30px auto;
+    width: 150px;
+    text-decoration: none;
+    color: #C5E898;
+    background-color: #19456B;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.disabled_button{
+    border: none;
+    display: block;
+    margin: 30px auto;
+    width: 150px;
+    text-decoration: none;
+    color: #C5E898;
+    background-color: #19456B;
+    border-radius: 5px;
+    padding: 10px;
+    opacity: 0.7;
+}
+
+.link_connection{
+    text-align: center;
+    text-decoration: underline;
+
+    a{
+        color: #19456B;
     }
 }

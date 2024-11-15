@@ -1,0 +1,27 @@
+/* Assurez-vous que la page occupe toute la hauteur de l'écran */
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Conteneur principal qui utilise Flexbox */
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  /* Le contenu s'étend pour occuper tout l'espace disponible */
+  main.content {
+    flex: 1;
+    padding: 20px; /* Ajustez selon les besoins */
+  }
+  
+  /* Le footer reste en bas de la page */
+  app-footer {
+    flex-shrink: 0; /* Empêche le footer de se rétrécir */
+    text-align: center;
+    padding: 10px 0;
+  }
+  

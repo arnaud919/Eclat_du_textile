@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
-import { Token } from '../shared/interfaces/entities';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
@@ -21,7 +20,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = new FormGroup({
       credentials: new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [Validators.required, Validators.minLength(5)])
+        password: new FormControl('', [Validators.required, Validators.minLength(12)])
       })
     });
   }

@@ -26,6 +26,7 @@ class CategoryArticle
     private ?string $name_category_article = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'categoryArticles')]
+    #[Groups(["categoryarticle"])]
     private ?self $subcategory_article = null;
 
     /**

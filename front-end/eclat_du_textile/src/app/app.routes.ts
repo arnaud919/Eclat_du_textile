@@ -5,7 +5,6 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ServiceProvisionResponseComponent } from './service-provision/service-provision.component';
 import { ServiceProvisionResponseItemComponent } from './service-provision-item/service-provision-item.component';
-import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profil/profil.component';
 import { CartShopComponent } from './cart-shop/cart-shop.component';
 

@@ -1,5 +1,9 @@
-<app-header></app-header>
+<div class="page-container">
+  <app-header></app-header> <!-- Composant du header -->
 
-<router-outlet />
+  <main class="content">
+    <router-outlet></router-outlet> <!-- Contenu des pages -->
+  </main>
 
-<app-footer></app-footer>
+  <app-footer></app-footer> <!-- Composant du footer -->
+</div>

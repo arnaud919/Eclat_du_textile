@@ -9,7 +9,7 @@
           <label for="email">Email</label>
           <input id="email" formControlName="email" type="email" required>
           <div class="required_filed" *ngIf="RegisterForm.get('email')?.invalid && RegisterForm.get('email')?.touched">
-            Email invalide
+            <p>Email invalide</p>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
           <label for="first_name">Prénom</label>
           <input id="first_name" type="text" formControlName="first_name" required>
           <div class="required_filed" *ngIf="RegisterForm.get('first_name')?.invalid && RegisterForm.get('first_name')?.touched">
-            Prenom requis
+            Prénom requis
           </div>
         </div>
       </div>

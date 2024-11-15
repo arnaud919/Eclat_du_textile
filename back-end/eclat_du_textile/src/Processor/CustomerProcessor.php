@@ -31,5 +31,8 @@ class CustomerProcessor implements ProcessorInterface
         // Sauvegarde dans la base de données
         $this->entityManager->persist($data);
         $this->entityManager->flush();
+        
+        return $data;
     }
+
 }

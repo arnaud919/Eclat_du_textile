@@ -6,16 +6,6 @@ customer:
     controller: App\Controller\RegisterCustomerController::registerUser
     methods: [POST]
 
-test_hash_password:
-    path: /api/test-hash
-    controller: App\Controller\RegisterCustomerController::testHashPassword
-    methods: [GET]
-
-register_customer_simple:
-    path: /api/register-customer-simple
-    controller: App\Controller\RegisterCustomerController::registerCustomerSimple
-    methods: [POST]
-
 controllers:
     resource:
         path: ../src/Controller/
