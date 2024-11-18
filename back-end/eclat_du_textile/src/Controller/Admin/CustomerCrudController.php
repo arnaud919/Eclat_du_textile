@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Customer;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -25,7 +26,6 @@ class CustomerCrudController extends AbstractCrudController
             yield EmailField::new('email'),
             yield TextField::new('first_name'),
             yield TextField::new('last_name'),
-            yield ArrayField::new('roles'),
             yield TextField::new('phone'),
         ];
     }

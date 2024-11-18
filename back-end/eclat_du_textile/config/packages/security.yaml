@@ -29,7 +29,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 username_path: email
                 password_path: password
-                
+
         api:
             pattern: ^/api
             stateless: true
@@ -37,7 +37,20 @@ security:
 
         main:
             lazy: true
+
             provider: app_user_provider
+
+            form_login:
+                username_parameter: email
+                password_parameter: password
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true           # Recommandé pour les formulaires
+                default_target_path: /admin # Page après connexion réussie
+
+            logout:
+                path: app_logout            # Route pour la déconnexion
+                target: /                   # Page après déconnexion
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -48,7 +61,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/customers, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 

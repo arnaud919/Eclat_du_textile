@@ -25,5 +25,4 @@ class CategoryArticleCrudController extends AbstractCrudController
             yield NumberField::new('multiplier_price')->setNumDecimals(2)
         ];
     }
-    
 }
