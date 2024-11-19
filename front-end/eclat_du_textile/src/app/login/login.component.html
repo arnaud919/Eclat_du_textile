@@ -11,30 +11,34 @@
           <input id="email" type="email" formControlName="email">
         </div>
         <div class="required_filed" *ngIf="loginForm.get('credentials.email')?.invalid && loginForm.get('credentials.email')?.touched">
-          <p *ngIf="loginForm.get('credentials.email')?.errors?.['required']">L'email est requis.</p>
-          <p *ngIf="loginForm.get('credentials.email')?.errors?.['email']">Email invalide.</p>
+          <p *ngIf="loginForm.get('credentials.email')?.errors?.['required']">L'email est requis</p>
+          <p *ngIf="loginForm.get('credentials.email')?.errors?.['email']">Email invalide</p>
         </div>
       </div>
-
+ 
       <div class="field_user_connection">
         <div class="field_user_input">
           <label for="password">Mot de passe</label>
           <input id="password" type="password" formControlName="password">
         </div>
         <div class="required_filed" *ngIf="loginForm.get('credentials.password')?.invalid && loginForm.get('credentials.password')?.touched">
-          <p *ngIf="loginForm.get('credentials.password')?.errors?.['required']">Le mot de passe est requis.</p>
+          <p *ngIf="loginForm.get('credentials.password')?.errors?.['required']">Le mot de passe est requis</p>
         </div>
       </div>
     </div>
 
     <button type="submit" 
       [disabled]="loginForm.invalid"
-      [ngClass]="{'button': loginForm.valid, 'disabled_button': loginForm.invalid}">
+      [ngClass]="{
+      'common-class button-margin': true,
+      'button': loginForm.valid,
+      'disabled_button': loginForm.invalid
+    }">
       Se connecter
     </button>
 
     <div class="link_connection">
-      <a routerLink="/register">Pas de compte ? Inscrivez-vous dès maintenant.</a>
+      <a routerLink="/register">Pas de compte ? Inscrivez-vous dès maintenant</a>
     </div>
   </form>
 

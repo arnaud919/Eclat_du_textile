@@ -43,16 +43,16 @@
         </div>
       </div>
 
-      <button type="submit" 
+      <button type="submit" class="button-margin"
         [disabled]="RegisterForm.invalid"
-        [ngClass]="{'button': RegisterForm.valid, 'disabled_button': RegisterForm.invalid}">
+        [ngClass]="{'button button-margin': RegisterForm.valid, 'disabled_button button-margin': RegisterForm.invalid}">
         S'inscrire
       </button>
 
     </form>
 
     <div class="link_connection">
-      <a routerLink="/login">Vous avez un compte ? Connectez-vous.</a>
+      <a routerLink="/login">Vous avez un compte ? Connectez-vous</a>
     </div>
 
   </div>

@@ -6,7 +6,5 @@ export const adminGuard: CanActivateChildFn = (childRoute, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if(this.authService.)
-
   return true;
 };

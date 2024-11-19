@@ -1,9 +1,13 @@
 <div class="profile-container" *ngIf="userProfile; else loading">
-  <h2>Mon Profil</h2>
   <div>
+    <h2>Mon Profil</h2>
+    <!-- <div class="nav-item order-3" *ngIf="authService.isLogged()">
+      <a class="btn btn-danger" (click)="logout()">Se deconnecter</a>
+    </div> -->
+  </div>
+  <div>
+
     <p><strong>Email :</strong> {{ userProfile.username || 'Non disponible' }}</p>
-    <p><strong>Prénom :</strong> {{ userProfile.first_name || 'Non disponible' }}</p>
-    <p><strong>Nom :</strong> {{ userProfile.last_name || 'Non disponible' }}</p>
 
     <div *ngIf="isAdmin">
       <p><strong>Statut :</strong> Administrateur</p>
