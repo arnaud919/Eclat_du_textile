@@ -17,6 +17,8 @@ export interface ConnectUser {
   password: string;
 }
 
+
+//username correspond à l'email
 export interface CustomerInfo {
   "@context": string,
   "@id": string,
@@ -25,6 +27,7 @@ export interface CustomerInfo {
   username: string,
   first_name:string,
   last_name: string,
+  phone?: string
 }
 
 export interface CategoryArticle {

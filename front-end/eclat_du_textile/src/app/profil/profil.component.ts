@@ -1,32 +1,49 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CustomerInfo, ServiceProvision } from '../shared/interfaces/entities';
-import { FormDataServiceService } from '../shared/services/form-data-service.service';
 import { RouterLink } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UpdateUserService } from '../shared/services/update-user.service';
 
 @Component({
   standalone: true,
   selector: 'app-profile',
   templateUrl: './profil.component.html',
   styleUrls: ['./profil.component.css'],
-  imports: [CommonModule, RouterLink]
+  imports: [CommonModule, RouterLink, ReactiveFormsModule]
 })
 export class ProfileComponent implements OnInit {
+  // variables utilisateur
+  profileForm!: FormGroup; // formulaire de mise à jour
   formDataArray: any[] = [];  // Tableau pour stocker toutes les soumissions du formulaire
   userProfile: CustomerInfo | null = null;  // Stocker les données utilisateur
   isLoading: boolean = true;  // Pour gérer l'état de chargement
   isAdmin: boolean = false;
   errorMessage: string | null = null;
   panier: any[] = [];
+  userId: number | null = null;
 
+  //variables services
   ServiceProvisionResponseItemData: ServiceProvision | null = null;
   totalPrice: number = 0;
   serviceData: any[] = [];  // Tableau pour stocker les données récupérées du sessionStorage
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    public authService: AuthService,
+    private userService: UpdateUserService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
+
+    // Initialiser le formulaire AVANT de charger les données
+    this.profileForm = new FormGroup({
+      first_name: new FormControl('', [Validators.required, Validators.minLength(2)] ),
+      last_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    });
+    
+
     // Vérifier si l'utilisateur est admin
     this.isAdmin = this.authService.isAdmin();
 
@@ -40,39 +57,61 @@ export class ProfileComponent implements OnInit {
     }
 
     // Charger les données de formulaire et de service
-    this.loadProfileData();
     this.loadServiceData();
+    this.loadProfileData();
   }
 
   // Récupérer les données du profil utilisateur et les données de formulaire
-  loadProfileData(): void {
-    // Charger les données du profil utilisateur depuis le sessionStorage
-    const storedUserProfile = sessionStorage.getItem('userProfile');
+  private loadProfileData(): void {
+    try {
+      // Charger les données utilisateur depuis le sessionStorage
+      const storedUserProfile = sessionStorage.getItem('userProfile');
+
+      if (storedUserProfile) {
+
+        this.userProfile = JSON.parse(storedUserProfile) as CustomerInfo;
+
+        console.log('Données récupérées du sessionStorage:', this.userProfile);
+
+        // Injecter les données dans le formulaire, uniquement si userProfile existe
+        if (this.userProfile) {
+          this.profileForm.patchValue({
+            first_name: this.userProfile.first_name || '', // Utiliser une valeur par défaut
+            last_name: this.userProfile.last_name || '',   // Utiliser une valeur par défaut
+            username: this.userProfile.username || '',
+          });
+          console.log('Formulaire pré-rempli avec les données utilisateur:', this.profileForm.value);
+
+          this.cdr.detectChanges();
+        }
+      } else {
+        console.error('Aucune donnée utilisateur trouvée dans le sessionStorage.');
+      }
     
-    if (storedUserProfile) {
-      this.userProfile = JSON.parse(storedUserProfile);  // Charger les données du profil
-    }
-  
-    // Charger le panier ou autre service si nécessaire
-    const storedData = sessionStorage.getItem('serviceProvisionData');
-    if (storedData) {
-      this.formDataArray = JSON.parse(storedData);
-      this.calculateTotalPrice();  // Calculer le total des prix après avoir chargé les données
-    } else {
-      console.log('Aucune donnée de panier trouvée.');
-      this.formDataArray = [];
-      this.totalPrice = 0;  // Réinitialiser le prix total si le panier est vide
+
+      // Charger d'autres données si nécessaire
+      const storedData = sessionStorage.getItem('serviceProvisionData');
+      if (storedData) {
+        this.formDataArray = JSON.parse(storedData);
+        this.calculateTotalPrice(); // Calculer le prix total des services
+      } else {
+        console.log('Aucune donnée de panier trouvée.');
+        this.formDataArray = [];
+        this.totalPrice = 0;
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des données :', error);
+    } finally {
+      this.isLoading = false;
     }
   }
-  
-
 
   private loadServiceData(): void {
     const storedData = sessionStorage.getItem('serviceProvisionData');
-    
+
     if (storedData) {
       this.serviceData = JSON.parse(storedData);
-      
+
       // Assurer que serviceData est bien un tableau
       if (Array.isArray(this.serviceData)) {
         // Si c'est un tableau, on peut utiliser forEach
@@ -80,7 +119,7 @@ export class ProfileComponent implements OnInit {
           entry.servicePrice = entry.servicePrice ?? 0;  // Définit servicePrice à 0 s'il est null
           entry.totalPrice = entry.totalPrice ?? 0;  // Définit totalPrice à 0 s'il est null
         });
-  
+
         console.log('Données récupérées du sessionStorage :', this.serviceData);
         this.calculateTotalPrice();  // Calculer le prix total
       } else {
@@ -92,15 +131,52 @@ export class ProfileComponent implements OnInit {
       this.serviceData = [];  // Réinitialiser à un tableau vide si aucune donnée
     }
   }
+
+  // Envoyer les modifications via le service
+  updateUser(): void {
+    if (this.profileForm.valid) {
+      const updatedData: any = {}; // Objet pour stocker les champs modifiés
   
+      // Comparez les valeurs initiales et actuelles
+      if (this.profileForm.value.first_name !== this.userProfile?.first_name) {
+        updatedData.first_name = this.profileForm.value.first_name;
+      }
+  
+      if (this.profileForm.value.last_name !== this.userProfile?.last_name) {
+        updatedData.last_name = this.profileForm.value.last_name;
+      }
+  
+      if (Object.keys(updatedData).length > 0) {
+        // Si au moins un champ a changé, envoyer une requête de mise à jour
+        this.userService.updateUser(this.userProfile!.id, updatedData).subscribe({
+          next: (response) => {
+            console.log('Mise à jour réussie :', response);
+            alert('Vos informations ont été mises à jour avec succès.');
+          },
+          error: (err) => {
+            console.error('Erreur lors de la mise à jour :', err);
+            alert('Une erreur est survenue lors de la mise à jour.');
+          },
+        });
+      } else {
+        alert('Aucune modification détectée.');
+      }
+    } else {
+      console.error('Formulaire invalide.');
+      this.profileForm.markAllAsTouched();
+    }
+  }
+
+  logout(): void {
+    this.authService.logout(); // Appelle la méthode de déconnexion du service
+  }
+
 
   // Calculer le prix total des services ajoutés
   calculateTotalPrice(): void {
     this.totalPrice = this.serviceData.reduce((sum, item) => sum + item.totalPrice, 0);
     console.log('Prix total recalculé :', this.totalPrice);
   }
-
-
 
   // Effacer les données du sessionStorage
   clearData(): void {

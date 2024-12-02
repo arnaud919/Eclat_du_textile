@@ -122,6 +122,17 @@ body, html {
     padding: 10px;
 }
 
+.button-red{
+    border: none;
+    display: block;
+    width: 150px;
+    text-decoration: none;
+    background-color: #DC3545;
+    color:#F8F1F1;
+    border-radius: 5px;
+    padding: 10px;
+}
+
 .button-margin{
     margin: 30px auto;
 }

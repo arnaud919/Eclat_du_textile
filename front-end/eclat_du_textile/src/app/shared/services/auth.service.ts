@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
 import { jwtDecode } from "jwt-decode";
@@ -29,7 +29,17 @@ export class AuthService {
 
   // Méthode de login pour envoyer les informations de connexion et récupérer le token JWT
   login(credentials: { email: string; password: string }): Observable<Token> {
-    return this.http.post<Token>(`${this.url}api/login_check`, credentials);
+    return this.http.post<Token>(`${this.url}api/login_check`, credentials).pipe(
+      tap((response: any) => {
+        // Exemple de structure de la réponse avec un token
+        const token = response.token;
+        const userInfo = jwtDecode(token); // Décoder le token pour récupérer les données utilisateur
+  
+        // Stocker le token et les informations utilisateur dans le sessionStorage
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('userProfile', JSON.stringify(userInfo));
+      })
+    );
   }
 
   // Sauvegarder le token dans le sessionStorage
