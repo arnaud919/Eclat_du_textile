@@ -1,0 +1,17 @@
+.user-update-form{
+    margin:initial !important;
+}
+
+h2{
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+.align-button-order{
+    display:flex;
+    gap: 10px;
+}
+
+.block{
+    margin-bottom: 50px;
+}

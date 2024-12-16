@@ -39,10 +39,11 @@ export class ProfileComponent implements OnInit {
 
     // Initialiser le formulaire AVANT de charger les données
     this.profileForm = new FormGroup({
-      first_name: new FormControl('', [Validators.required, Validators.minLength(2)] ),
-      last_name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      username: new FormControl({ value: '', disabled: true }),
+      first_name: new FormControl('', [Validators.required, Validators.minLength(1)]),
+      last_name: new FormControl('', [Validators.required, Validators.minLength(1)]),
     });
-    
+
 
     // Vérifier si l'utilisateur est admin
     this.isAdmin = this.authService.isAdmin();
@@ -80,6 +81,7 @@ export class ProfileComponent implements OnInit {
             last_name: this.userProfile.last_name || '',   // Utiliser une valeur par défaut
             username: this.userProfile.username || '',
           });
+
           console.log('Formulaire pré-rempli avec les données utilisateur:', this.profileForm.value);
 
           this.cdr.detectChanges();
@@ -87,7 +89,7 @@ export class ProfileComponent implements OnInit {
       } else {
         console.error('Aucune donnée utilisateur trouvée dans le sessionStorage.');
       }
-    
+
 
       // Charger d'autres données si nécessaire
       const storedData = sessionStorage.getItem('serviceProvisionData');
@@ -136,21 +138,37 @@ export class ProfileComponent implements OnInit {
   updateUser(): void {
     if (this.profileForm.valid) {
       const updatedData: any = {}; // Objet pour stocker les champs modifiés
-  
+
       // Comparez les valeurs initiales et actuelles
       if (this.profileForm.value.first_name !== this.userProfile?.first_name) {
         updatedData.first_name = this.profileForm.value.first_name;
       }
-  
+
       if (this.profileForm.value.last_name !== this.userProfile?.last_name) {
         updatedData.last_name = this.profileForm.value.last_name;
       }
-  
+
       if (Object.keys(updatedData).length > 0) {
         // Si au moins un champ a changé, envoyer une requête de mise à jour
         this.userService.updateUser(this.userProfile!.id, updatedData).subscribe({
           next: (response) => {
+
             console.log('Mise à jour réussie :', response);
+
+            // Mettre à jour uniquement les données utilisateur dans le sessionStorage
+            const currentSessionData = JSON.parse(sessionStorage.getItem('userProfile') || '{}');
+            const updatedSessionData = {
+              ...currentSessionData, // Conserver les autres données existantes
+              ...updatedData, // Mettre à jour uniquement les données modifiées
+            };
+            sessionStorage.setItem('userProfile', JSON.stringify(updatedSessionData));
+            console.log('SessionStorage mis à jour :', updatedSessionData);
+
+            // Recharger les données dans le formulaire
+            this.userProfile = updatedSessionData; // Mettre à jour le profil utilisateur localement
+            this.profileForm.patchValue(updatedSessionData); // Mettre à jour le formulaire
+
+
             alert('Vos informations ont été mises à jour avec succès.');
           },
           error: (err) => {
@@ -194,6 +212,7 @@ export class ProfileComponent implements OnInit {
 
       // Met à jour le sessionStorage avec les articles restants
       sessionStorage.setItem('serviceProvisionData', JSON.stringify(this.serviceData));
+
 
       // Recalcule le prix total après suppression
       this.calculateTotalPrice();

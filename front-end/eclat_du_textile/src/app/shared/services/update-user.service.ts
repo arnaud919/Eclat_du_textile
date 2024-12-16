@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class UpdateUserService {
 
-  private apiUrl = `${environment.apiURL}/users`; // URL de base pour les utilisateurs
+  private apiUrl = `${environment.apiURL}api/customers`; // URL de base pour les utilisateurs
 
   constructor(private http: HttpClient) {}
 
@@ -19,10 +19,5 @@ export class UpdateUserService {
     });
 
     return this.http.patch(`${this.apiUrl}/${userId}`, updatedData, { headers });
-  }
-
-  // Méthode pour récupérer les données utilisateur (facultatif)
-  getUserById(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${userId}`);
   }
 }

@@ -1,92 +1,83 @@
-<div class="profile-container" *ngIf="!isLoading; else loading">
+<div class="profile-container block" *ngIf="!isLoading; else loading">
   <h2>Mon Profil</h2>
 
   <form [formGroup]="profileForm" (ngSubmit)="updateUser()">
 
-    <div>
-      <label for="first_name">Prénom</label>
-      <input id="first_name" type="text" formControlName="first_name" placeholder="Votre prénom" />
-      <div *ngIf="profileForm.get('first_name')?.invalid && profileForm.get('first_name')?.touched">
-        <small class="error-text">Prénom requis</small>
+    <div class="field_user_connection user-update-form">
+      <div class="field_user_input">
+        <label for="username">Email</label>
+        <input id="username" type="email" formControlName="username" />
+        <div *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched">
+          <small class="error-text">Email requis</small>
+        </div>
       </div>
     </div>
 
-    <div>
-      <label for="last_name">Nom</label>
-      <input id="last_name" type="text" formControlName="last_name" placeholder="Votre nom" />
-      <div *ngIf="profileForm.get('last_name')?.invalid && profileForm.get('last_name')?.touched">
-        <small class="error-text">Nom requis</small>
+    <div class="field_user_connection user-update-form">
+      <div class="field_user_input">
+        <label for="first_name">Prénom</label>
+        <input id="first_name" type="text" formControlName="first_name" placeholder="Votre prénom" />
+        <div *ngIf="profileForm.get('first_name')?.invalid && profileForm.get('first_name')?.touched">
+          <small class="error-text">Prénom requis</small>
+        </div>
       </div>
     </div>
 
-    <button type="submit" [disabled]="profileForm.invalid">Modifier</button>
+    <div class="field_user_connection user-update-form">
+      <div class="field_user_input">
+        <label for="last_name">Nom</label>
+        <input id="last_name" type="text" formControlName="last_name" placeholder="Votre nom" />
+        <div *ngIf="profileForm.get('last_name')?.invalid && profileForm.get('last_name')?.touched">
+          <small class="error-text">Nom requis</small>
+        </div>
+      </div>
+    </div>
+
+    <button class="button" type="submit" [disabled]="profileForm.invalid">Modifier</button>
   </form>
-
-  <h2>Historique des services choisis</h2>
-  <div *ngIf="formDataArray.length > 0; else noData">
-    <div *ngFor="let entry of formDataArray">
-      <p><strong>Service :</strong> {{ entry.serviceName }}</p>
-      <p><strong>Prix :</strong> {{ entry.totalPrice | number:'1.2-2' }} €</p>
-    </div>
-  </div>
-
-  <ng-template #noData>
-    <p>Aucune donnée disponible.</p>
-  </ng-template>
 </div>
 
-<ng-template #loading>
-  <p>Chargement des informations...</p>
-</ng-template>
-
-<div class="profile-container" *ngIf="userProfile; else loading">
-  <div>
-    <h2>Mon Profil</h2>
-  </div>
-  <div>
-
-    <p><strong>Email :</strong> {{ userProfile.username || 'Non disponible' }}</p>
-    <p><strong>Prénom :</strong> {{ userProfile.first_name || 'Non disponible' }}</p>
-    <p><strong>Nom de famille :</strong> {{ userProfile.last_name || 'Non disponible' }}</p>
-
-    <div *ngIf="isAdmin">
-      <p><strong>Statut :</strong> Administrateur</p>
-    </div>
-  </div>
-</div>
 <br>
 
 <!-- Template de chargement -->
-<!-- <ng-template #loading>
+<ng-template #loading>
   <p>Chargement des informations du profil...</p>
 </ng-template>
 
-<h2>Commande :</h2> -->
-
-<!-- Bouton pour effacer les données -->
-<!-- <button (click)="clearData()" class="button-red">Effacer ma commande</button> -->
+<h2>Commande :</h2>
 
 <!-- Si aucune donnée n'est trouvée -->
-<!-- <div *ngIf="serviceData?.length === 0">
+<div *ngIf="serviceData?.length === 0">
   <p>Votre panier est vide.</p>
 </div>
 
-<div *ngFor="let item of serviceData; let i = index">
-  <h3>Entrée {{ i + 1 }}</h3>
-  <p><strong>Nom du service :</strong> {{ item.serviceName }}</p>
-  <p><strong>Nom du vêtement :</strong> {{ item.clothName }}</p>
-  <p><strong>Quantité :</strong> {{ item.quantity }}</p>
-  <p><strong>Prix total :</strong> {{ item.totalPrice | number:'1.2-2' }} €</p>
-  <button class="button-red" (click)="removeItem(i)">Supprimer cet article</button>
-  <hr>
-</div> -->
+<div class="block">
+
+  <div class="m-0">
+    <div *ngFor="let item of serviceData; let i = index">
+      <p class="m-0"><strong>Nom du service :</strong> {{ item.serviceName }}</p>
+      <p class="m-0"><strong>Nom du vêtement :</strong> {{ item.clothName }}</p>
+      <p class="m-0"><strong>Quantité :</strong> {{ item.quantity }}</p>
+      <p><strong>Prix total :</strong> {{ item.totalPrice*item.quantity | number:'1.2-2' }} €</p>
+      <button class="button-red" (click)="removeItem(i)">Supprimer cet article</button>
+      <hr>
+    </div>
+  </div>
+
+</div>
 
 <!-- Affichage du prix total pour tous les services -->
-<!-- <div *ngIf="totalPrice > 0">
-  <h3>Prix total pour tous les services : {{ totalPrice | number:'1.0-2' }} €</h3>
-  <h3><a [routerLink]="['/commande']">Passer commande</a></h3>
+<div *ngIf="totalPrice > 0" class="block">
+  <h3>Prix total de la commande : {{ totalPrice | number:'1.0-2' }} €</h3>
+
+  <div class="align-button-order">
+    <div><a class="button" [routerLink]="['/commande']">Passer commande</a></div>
+
+    <!-- Bouton pour effacer les données -->
+    <button (click)="clearData()" class="button-red">Effacer ma commande</button>
+  </div>
 </div>
 
 <div class="nav-item order-3" *ngIf="authService.isLogged()">
   <a class="btn btn-danger" (click)="logout()">Se deconnecter</a>
-</div> -->
+</div>

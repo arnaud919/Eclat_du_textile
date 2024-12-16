@@ -6,8 +6,9 @@ a.back{
     width:50px;
 }
 
+
+
 .service_provision_item_container {
-    margin: 50px 0px;
 
     .service_provision_item_select {
 
@@ -94,7 +95,11 @@ a.back{
         }
     }
 
-    @media screen and (max-width:576px) {
+    @media screen and (max-width:768px) {
+
+        .service_provision_item_line{
+            display:none;
+        }
 
         .service_provision_item_select {
 

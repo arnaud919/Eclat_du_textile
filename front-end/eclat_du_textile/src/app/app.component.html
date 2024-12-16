@@ -1,5 +1,5 @@
 <div class="page-container">
-  <app-header></app-header> <!-- Composant du header -->
+  <app-header *ngIf="showHeader"></app-header> <!-- Composant du header -->
 
   <main class="content">
     <router-outlet></router-outlet> <!-- Contenu des pages -->

@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { provideRouter, Routes, withInMemoryScrolling } from '@angular/router';
 import { IndexComponent } from './index/index.component';
 import { authGuard } from './guards/auth.guard';
 import { LoginComponent } from './login/login.component';
@@ -15,6 +15,15 @@ export const routes: Routes = [
     {path:"nos_prestations", component:ServiceProvisionResponseComponent},
     {path:"nos_prestations/:id", component:ServiceProvisionResponseItemComponent},
     {path:"profil", component:ProfileComponent, canActivate: [authGuard]},
-    {path:"commande", component:CartShopComponent, canActivate: [authGuard]},
+    {path:"commande", component:CartShopComponent, canActivate: [authGuard], data: { showHeader: false }},
     {path:"**", redirectTo:""}
 ];
+
+export const appRouterProviders = [
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+      }),
+    ),
+  ];

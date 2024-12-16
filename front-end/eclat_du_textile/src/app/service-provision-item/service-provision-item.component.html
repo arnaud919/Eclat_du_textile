@@ -86,7 +86,7 @@
 
                     <!-- Si un article est sélectionné, on affiche le prix multiplié par le multiplicateur -->
                     <span *ngIf="selectedArticle">
-                        {{ selectedArticle.multiplier_price * ServiceProvisionResponseItemData.price_service |
+                        {{ selectedArticle.multiplier_price*ServiceProvisionResponseItemData.price_service |
                         number:'1.0-2' }} €
                     </span>
 
