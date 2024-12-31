@@ -111,7 +111,6 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     const savedData = this.formDataService.getFormData();
     if (savedData) {
       this.itemForm.patchValue(savedData); // Injecter les valeurs récupérées dans le FormGroup
-      console.log('Données récupérées du sessionStorage et injectées dans le formulaire:', savedData);
     }
   }
 
@@ -193,7 +192,6 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
       // Sauvegarder les données mises à jour dans le sessionStorage
       sessionStorage.setItem('serviceProvisionData', JSON.stringify(existingData));
   
-      console.log('Données sauvegardées dans le sessionStorage :', existingData);  // Débogage
     }
   }
   

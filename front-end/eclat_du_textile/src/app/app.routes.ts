@@ -9,21 +9,21 @@ import { ProfileComponent } from './profil/profil.component';
 import { CartShopComponent } from './cart-shop/cart-shop.component';
 
 export const routes: Routes = [
-    {path:"", component:IndexComponent},
-    {path:"login", component: LoginComponent},
-    {path:"register", component:RegisterComponent },
-    {path:"nos_prestations", component:ServiceProvisionResponseComponent},
-    {path:"nos_prestations/:id", component:ServiceProvisionResponseItemComponent},
-    {path:"profil", component:ProfileComponent, canActivate: [authGuard]},
-    {path:"commande", component:CartShopComponent, canActivate: [authGuard], data: { showHeader: false }},
-    {path:"**", redirectTo:""}
+  { path: "", component: IndexComponent },
+  { path: "login", component: LoginComponent },
+  { path: "register", component: RegisterComponent },
+  { path: "nos_prestations", component: ServiceProvisionResponseComponent },
+  { path: "nos_prestations/:id", component: ServiceProvisionResponseItemComponent },
+  { path: "profil", component: ProfileComponent, canActivate: [authGuard] },
+  { path: "commande", component: CartShopComponent, canActivate: [authGuard], data: { showHeader: false } },
+  { path: "**", redirectTo: "" }
 ];
 
 export const appRouterProviders = [
-    provideRouter(
-      routes,
-      withInMemoryScrolling({
-        scrollPositionRestoration: 'enabled',
-      }),
-    ),
-  ];
+  provideRouter(
+    routes,
+    withInMemoryScrolling({
+      scrollPositionRestoration: 'enabled',
+    }),
+  ),
+];

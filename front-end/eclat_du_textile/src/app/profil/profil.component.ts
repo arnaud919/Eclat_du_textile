@@ -72,8 +72,6 @@ export class ProfileComponent implements OnInit {
 
         this.userProfile = JSON.parse(storedUserProfile) as CustomerInfo;
 
-        console.log('Données récupérées du sessionStorage:', this.userProfile);
-
         // Injecter les données dans le formulaire, uniquement si userProfile existe
         if (this.userProfile) {
           this.profileForm.patchValue({
@@ -81,8 +79,6 @@ export class ProfileComponent implements OnInit {
             last_name: this.userProfile.last_name || '',   // Utiliser une valeur par défaut
             username: this.userProfile.username || '',
           });
-
-          console.log('Formulaire pré-rempli avec les données utilisateur:', this.profileForm.value);
 
           this.cdr.detectChanges();
         }
@@ -95,9 +91,8 @@ export class ProfileComponent implements OnInit {
       const storedData = sessionStorage.getItem('serviceProvisionData');
       if (storedData) {
         this.formDataArray = JSON.parse(storedData);
-        this.calculateTotalPrice(); // Calculer le prix total des services
+        this.getTotalPrice(); // Calculer le prix total des services
       } else {
-        console.log('Aucune donnée de panier trouvée.');
         this.formDataArray = [];
         this.totalPrice = 0;
       }
@@ -122,8 +117,7 @@ export class ProfileComponent implements OnInit {
           entry.totalPrice = entry.totalPrice ?? 0;  // Définit totalPrice à 0 s'il est null
         });
 
-        console.log('Données récupérées du sessionStorage :', this.serviceData);
-        this.calculateTotalPrice();  // Calculer le prix total
+        this.getTotalPrice();  // Calculer le prix total
       } else {
         console.error('Les données récupérées ne sont pas un tableau.');
         this.serviceData = [];  // Si ce n'est pas un tableau, on réinitialise à un tableau vide
@@ -153,8 +147,6 @@ export class ProfileComponent implements OnInit {
         this.userService.updateUser(this.userProfile!.id, updatedData).subscribe({
           next: (response) => {
 
-            console.log('Mise à jour réussie :', response);
-
             // Mettre à jour uniquement les données utilisateur dans le sessionStorage
             const currentSessionData = JSON.parse(sessionStorage.getItem('userProfile') || '{}');
             const updatedSessionData = {
@@ -162,7 +154,6 @@ export class ProfileComponent implements OnInit {
               ...updatedData, // Mettre à jour uniquement les données modifiées
             };
             sessionStorage.setItem('userProfile', JSON.stringify(updatedSessionData));
-            console.log('SessionStorage mis à jour :', updatedSessionData);
 
             // Recharger les données dans le formulaire
             this.userProfile = updatedSessionData; // Mettre à jour le profil utilisateur localement
@@ -191,9 +182,12 @@ export class ProfileComponent implements OnInit {
 
 
   // Calculer le prix total des services ajoutés
-  calculateTotalPrice(): void {
-    this.totalPrice = this.serviceData.reduce((sum, item) => sum + item.totalPrice, 0);
-    console.log('Prix total recalculé :', this.totalPrice);
+  getTotalPrice(): number {
+    return this.serviceData.reduce((total, item) => {
+      const quantity = item.quantity || 0;
+      const price = item.totalPrice || 0;
+      return total + price * quantity;
+    }, 0);
   }
 
   // Effacer les données du sessionStorage
@@ -215,7 +209,7 @@ export class ProfileComponent implements OnInit {
 
 
       // Recalcule le prix total après suppression
-      this.calculateTotalPrice();
+      this.getTotalPrice();
 
       console.log(`Article à l'index ${index} supprimé du profil.`);
     } else {

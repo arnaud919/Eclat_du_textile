@@ -3,7 +3,7 @@
 
   <form [formGroup]="profileForm" (ngSubmit)="updateUser()">
 
-    <div class="field_user_connection user-update-form">
+    <div class="field_user_connection margin-initial-form">
       <div class="field_user_input">
         <label for="username">Email</label>
         <input id="username" type="email" formControlName="username" />
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="field_user_connection user-update-form">
+    <div class="field_user_connection margin-initial-form">
       <div class="field_user_input">
         <label for="first_name">Prénom</label>
         <input id="first_name" type="text" formControlName="first_name" placeholder="Votre prénom" />
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="field_user_connection user-update-form">
+    <div class="field_user_connection margin-initial-form">
       <div class="field_user_input">
         <label for="last_name">Nom</label>
         <input id="last_name" type="text" formControlName="last_name" placeholder="Votre nom" />
@@ -46,13 +46,7 @@
 
 <h2>Commande :</h2>
 
-<!-- Si aucune donnée n'est trouvée -->
-<div *ngIf="serviceData?.length === 0">
-  <p>Votre panier est vide.</p>
-</div>
-
 <div class="block">
-
   <div class="m-0">
     <div *ngFor="let item of serviceData; let i = index">
       <p class="m-0"><strong>Nom du service :</strong> {{ item.serviceName }}</p>
@@ -63,12 +57,11 @@
       <hr>
     </div>
   </div>
-
 </div>
 
 <!-- Affichage du prix total pour tous les services -->
-<div *ngIf="totalPrice > 0" class="block">
-  <h3>Prix total de la commande : {{ totalPrice | number:'1.0-2' }} €</h3>
+<div *ngIf="getTotalPrice() > 0; else noItems" class="block">
+  <h3>Prix total de la commande : {{ getTotalPrice() | number:'1.0-2' }} €</h3>
 
   <div class="align-button-order">
     <div><a class="button" [routerLink]="['/commande']">Passer commande</a></div>
@@ -76,7 +69,12 @@
     <!-- Bouton pour effacer les données -->
     <button (click)="clearData()" class="button-red">Effacer ma commande</button>
   </div>
+  
 </div>
+
+<ng-template #noItems>
+  <p>Votre panier est vide.</p>
+</ng-template>
 
 <div class="nav-item order-3" *ngIf="authService.isLogged()">
   <a class="btn btn-danger" (click)="logout()">Se deconnecter</a>

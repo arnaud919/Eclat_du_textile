@@ -16,12 +16,10 @@ export class CartShopService {
   updatePanierData(items: any[], coordinates: any = null, payment: any = null): void {
     const panier = { items, coordinates, payment };
     sessionStorage.setItem(this.panierKey, JSON.stringify(panier));
-    console.log('Panier mis à jour :', panier);
   }
 
   // Vider le panier après confirmation
   clearPanier(): void {
     sessionStorage.removeItem(this.panierKey);
-    console.log('Panier vidé');
   }
 }

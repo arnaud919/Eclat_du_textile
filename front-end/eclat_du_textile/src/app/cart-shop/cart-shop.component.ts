@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { FormDataServiceService } from '../shared/services/form-data-service.service'; // Import du service
 import { CommonModule } from '@angular/common';
 
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './cart-shop.component.html',
   styleUrls: ['./cart-shop.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, RouterLink]
 })
 export class CartShopComponent implements OnInit {
   currentStep: number = 1;  // Étape actuelle : 1 - Panier, 2 - Coordonnées, 3 - Paiement, 4 - Validation
@@ -23,47 +23,68 @@ export class CartShopComponent implements OnInit {
   storedCoordinates: any = null;  // Coordonnées stockées
   storedPayment: any = null;      // Informations de paiement stockées
 
-  constructor(private router: Router, private formDataService: FormDataServiceService) {}
+  minDate: string = "";
+
+  constructor(private router: Router, private formDataService: FormDataServiceService) { }
 
   ngOnInit(): void {
-    this.initializeForms();  // Initialiser les formulaires
     this.loadCartData();     // Charger les données du panier
+    this.initializeForms();  // Initialiser les formulaires
     this.loadStoredData();   // Charger les données des coordonnées et du paiement
     this.calculateTotalPrice();  // Calculer le prix total du panier
+    this.initializeCardNumberForm(); // Initialisation de l'écouteur sur le champ "cardNumber"
+    this.initializeExpirationDateForm(); // Ajouter un écouteur pour formater la date d'expiration
   }
 
   // Initialiser les formulaires de coordonnées et de paiement
   initializeForms(): void {
 
-    const today = new Date().toISOString().split('T')[0]; 
-    
+    const today = new Date().toISOString().split('T')[0];
+
     this.coordinatesForm = new FormGroup({
       address: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.required),
+      phone: new FormControl('', [
+        Validators.required, // Champ obligatoire
+        Validators.pattern('^\\+?[0-9]{7,15}$'), // Format international (exemple)
+        Validators.minLength(7), // Minimum de chiffres
+        Validators.maxLength(15), // Maximum de chiffres
+      ],),
       depositDate: new FormControl(today, Validators.required)
     });
 
     this.paymentForm = new FormGroup({
-      cardNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{16}$')]),  // Faux numéro de carte
+      cardNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{19}$')]),  // Faux numéro de carte
       expirationDate: new FormControl('', Validators.required),
       cvv: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{3}$')])  // CVV factice
+    });
+  }
+
+  initializeCardNumberForm(): void {
+    this.paymentForm.get('cardNumber')?.valueChanges.subscribe((value: string) => {
+      const formattedValue = this.formatCardNumber(value || '');
+      this.paymentForm.get('cardNumber')?.setValue(formattedValue, { emitEvent: false });
+    });
+  }
+
+  initializeExpirationDateForm(): void {
+    this.paymentForm.get('expirationDate')?.valueChanges.subscribe((value: string) => {
+      const formattedValue = this.formatExpiryDate(value || '');
+      this.paymentForm.get('expirationDate')?.setValue(formattedValue, { emitEvent: false });
     });
   }
 
   // Charger les données du panier depuis le sessionStorage
   loadCartData(): void {
     const storedData = sessionStorage.getItem('serviceProvisionData');
-    
+
     if (storedData) {
       this.panier = JSON.parse(storedData);
-      
+
       if (Array.isArray(this.panier)) {
         this.panier.forEach(item => {
           item.servicePrice = item.servicePrice ?? 0;
           item.totalPrice = item.totalPrice ?? 0;
         });
-
-        console.log('Données du panier récupérées :', this.panier);
         this.calculateTotalPrice();
       } else {
         console.error('Les données récupérées ne sont pas un tableau.');
@@ -78,13 +99,10 @@ export class CartShopComponent implements OnInit {
   // Charger les données stockées (coordonnées et paiement) depuis formDataService
   loadStoredData(): void {
     const storedData = this.formDataService.getFormData();
-    
+
     if (storedData) {
       this.storedCoordinates = storedData.coordinates || null;
       this.storedPayment = storedData.payment || null;
-
-      console.log('Coordonnées chargées :', this.storedCoordinates);
-      console.log('Paiement chargé :', this.storedPayment);
 
       // Pré-remplir les formulaires si les données existent
       if (this.storedCoordinates) {
@@ -94,7 +112,6 @@ export class CartShopComponent implements OnInit {
         this.paymentForm.patchValue(this.storedPayment);
       }
     } else {
-      console.log('Aucune donnée de coordonnées ou de paiement trouvée.');
     }
   }
 
@@ -122,7 +139,7 @@ export class CartShopComponent implements OnInit {
 
       const storedData = { items: this.panier, coordinates: this.storedCoordinates, payment: this.storedPayment };
       this.formDataService.setFormData(storedData);  // Sauvegarder le panier, les coordonnées et le paiement
-      
+
       this.nextStep();
     } else {
       console.error('Formulaire de coordonnées invalide');
@@ -130,15 +147,61 @@ export class CartShopComponent implements OnInit {
     }
   }
 
+  formatCardNumber(value: string): string {
+    // Supprimez tous les espaces existants
+    const noSpaces = value.replace(/\s+/g, '');
+
+    // Ajoutez un espace tous les 4 caractères
+    return noSpaces.replace(/(.{4})/g, '$1 ').trim();
+  }
+
+  formatExpiryDate(value: string): string {
+    // Supprimer tous les caractères non numériques
+    const numericValue = value.replace(/[^0-9]/g, '');
+
+    // Ajouter un "/" après 2 caractères
+    if (numericValue.length > 2) {
+      return numericValue.substring(0, 2) + '/' + numericValue.substring(2, 4);
+    }
+
+    return numericValue;
+  }
+
+  // Validation pour vérifier si la date d'expiration est correcte
+  validateExpiryDate(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = control.value;
+
+    // Vérifier que le format est valide (par exemple, MM/YY)
+    const regex = /^(0[1-9]|1[0-2])\/\d{2}$/; // MM/YY
+    if (!regex.test(value)) {
+      return { invalidFormat: true };
+    }
+
+    // Extraire le mois et l'année
+    const [month, year] = value.split('/').map((part: string) => parseInt(part, 10));
+    
+
+    // Obtenir la date actuelle
+    const now = new Date();
+    const currentYear = now.getFullYear() % 100; // Année sur 2 chiffres
+    const currentMonth = now.getMonth() + 1; // Mois courant
+
+    // Vérifier que la date n'est pas expirée
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      return { expiredDate: true };
+    }
+
+    return null; // Pas d'erreur
+  }
+
   // Sauvegarder les informations de paiement et passer à l'étape suivante
   savePayment(): void {
     if (this.paymentForm.valid) {
       this.storedPayment = this.paymentForm.value;
-      console.log('Informations de paiement sauvegardées :', this.storedPayment);
 
       const storedData = { items: this.panier, coordinates: this.storedCoordinates, payment: this.storedPayment };
       this.formDataService.setFormData(storedData);  // Sauvegarder le panier, les coordonnées et le paiement
-      
+
       this.nextStep();
     } else {
       console.error('Formulaire de paiement invalide');

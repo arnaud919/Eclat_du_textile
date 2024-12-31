@@ -49,11 +49,9 @@ export class LoginComponent implements OnInit {
 
   // Méthode pour gérer une connexion réussie
   private handleLoginSuccess(token: string): void {
-    console.log('Token reçu après connexion :', token);  // Afficher le token brut dans la console
     
     // Décoder le token avec jwtDecode
     const decodedToken = jwtDecode(token);
-    console.log('Token décodé :', decodedToken);  // Afficher le token décodé dans la console
 
     this.authService.saveToken(token);  // Sauvegarder le token reçu
     this.navigateToHome();  // Rediriger vers la page d'accueil
