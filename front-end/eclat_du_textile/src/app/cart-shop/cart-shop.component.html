@@ -25,7 +25,7 @@
             <p><strong>Quantité : </strong>{{ item.quantity}}</p>
           </div>
           <div>
-            <p><strong>{{ item.totalPrice | number:'1.0-2' }}</strong> €</p>
+            <p><strong>{{ item.totalPrice*item.quantity | number:'1.0-2' }}</strong> €</p>
           </div>
         </div>
         <hr>
@@ -67,7 +67,7 @@
       <div class="field_user_connection">
         <div class="field_user_input">
           <label for="phone">Téléphone</label>
-          <input id="phone" formControlName="phone" placeholder="Votre numéro de téléphone" />
+          <input id="phone" formControlName="phone" placeholder="Votre numéro de téléphone" maxlength="15" size="15" />
           <div *ngIf="coordinatesForm.get('phone')?.invalid && coordinatesForm.get('phone')?.touched">
             Téléphone requis
           </div>

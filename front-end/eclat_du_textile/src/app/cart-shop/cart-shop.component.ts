@@ -53,7 +53,7 @@ export class CartShopComponent implements OnInit {
     });
 
     this.paymentForm = new FormGroup({
-      cardNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{19}$')]),  // Faux numéro de carte
+      cardNumber: new FormControl('', [Validators.required, this.validateCardNumber]),  // Faux numéro de carte
       expirationDate: new FormControl('', Validators.required),
       cvv: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{3}$')])  // CVV factice
     });
@@ -79,6 +79,7 @@ export class CartShopComponent implements OnInit {
 
     if (storedData) {
       this.panier = JSON.parse(storedData);
+      console.log(this.panier);
 
       if (Array.isArray(this.panier)) {
         this.panier.forEach(item => {
@@ -117,7 +118,7 @@ export class CartShopComponent implements OnInit {
 
   // Calculer le prix total du panier
   calculateTotalPrice(): void {
-    this.totalPrice = this.panier.reduce((sum, item) => sum + (item.totalPrice || 0), 0);
+    this.totalPrice = this.panier.reduce((sum, item) => sum + (item.totalPrice*item.quantity || 0), 0);
     console.log('Prix total calculé :', this.totalPrice);
   }
 
@@ -153,6 +154,17 @@ export class CartShopComponent implements OnInit {
 
     // Ajoutez un espace tous les 4 caractères
     return noSpaces.replace(/(.{4})/g, '$1 ').trim();
+  }
+
+  validateCardNumber(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = control.value.replace(/\s+/g, ''); // Supprimer les espaces
+    const regex = /^\d{16}$/; // 16 chiffres uniquement
+
+    if (!regex.test(value)) {
+      return { invalidFormat: true }; // Retourne une erreur si le format est incorrect
+    }
+
+    return null; // Pas d'erreur
   }
 
   formatExpiryDate(value: string): string {

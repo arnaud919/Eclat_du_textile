@@ -6,14 +6,18 @@
         <form [formGroup]="itemForm" (ngSubmit)="addItem()"
             class="col-md-5 col-xs-12 order-sm-2 order-md-0 service_provision_item_select">
 
+
             <div class="options">
                 <label for="cloth">Vêtements</label>
                 <select formControlName="cloth" name="cloth" id="cloth" (change)="onArticleSelect($event)" required>
                     <option value="">--Sélectionner votre vêtement--</option>
+
                     <option *ngFor="let categoryArticle of CategoryArticleMembers | isSubArticle;"
                         [value]="categoryArticle.id">
                         {{categoryArticle.name_category_article}}
                     </option>
+
+
                 </select>
                 <div *ngIf="itemForm.get('cloth')?.invalid && itemForm.get('cloth')?.touched">
                     Champs requis

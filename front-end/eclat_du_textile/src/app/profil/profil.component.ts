@@ -186,7 +186,7 @@ export class ProfileComponent implements OnInit {
     return this.serviceData.reduce((total, item) => {
       const quantity = item.quantity || 0;
       const price = item.totalPrice || 0;
-      return total + price * quantity;
+      return total+price*quantity;
     }, 0);
   }
 
