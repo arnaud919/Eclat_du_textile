@@ -25,7 +25,7 @@ export interface CustomerInfo {
   "@type": string,
   id: number,
   username: string,
-  first_name:string,
+  first_name: string,
   last_name: string,
   phone?: string
 }
@@ -36,10 +36,16 @@ export interface CategoryArticle {
   "@type": string,
   id: number,
   name_category_article: string,
-  subcategory_article: string,
-  categoryArticles: [],
+  subcategory_article?: SubCategoryArticle[],
   items: [],
   multiplier_price: number
+}
+
+export interface SubCategoryArticle {
+  "@id": string,
+  "@type": string,
+  id: number; // ID unique de la sous-catégorie
+  name_category_article: string; // Nom de la sous-catégorie
 }
 
 export interface ServiceProvision {
@@ -116,7 +122,7 @@ export interface UniqueItem {
   multiplier_price: number
 }
 
-export interface TypeMaterial{
+export interface TypeMaterial {
   "@context": string,
   "@id": string,
   "@type": string,

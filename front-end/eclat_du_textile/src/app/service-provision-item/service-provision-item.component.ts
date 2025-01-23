@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, input, Input } from '@angular/core';
 import { ServiceProvisionResponseService } from '../shared/services/service-provision.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ApiListResponse, ServiceProvision, CategoryArticle, TypeMaterial, Color } from '../shared/interfaces/entities';
+import { ApiListResponse, ServiceProvision, CategoryArticle, TypeMaterial, Color, SubCategoryArticle } from '../shared/interfaces/entities';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { CategoryArticleService } from '../shared/services/category-article.service';
@@ -21,12 +21,15 @@ import { FormDataServiceService } from '../shared/services/form-data-service.ser
 
 export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy {
 
+  // ID extrait et validé
+  pageId!: number;
+
   // Interfaces
-  ServiceProvisionResponseItemData: ServiceProvision | null = null; // Donnée du service choisi
-  ApiData: ApiListResponse | undefined;
-  CategoryArticleMembers: CategoryArticle[] = [];
-  TypeMaterialMembers: TypeMaterial[] = [];
-  ColorMembers: Color[] = [];
+  serviceProvisionResponseItemData: ServiceProvision | null = null; // Donnée du service choisi
+  apiData: ApiListResponse | undefined;
+  categoryArticleMembers: CategoryArticle[] = [];
+  typeMaterialMembers: TypeMaterial[] = [];
+  colorMembers: Color[] = [];
 
   // Subscriptions
   subscriptions: Subscription[] = [];
@@ -41,22 +44,22 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     quantity: new FormControl(1, [Validators.required, Validators.min(1)])  // Ajout du champ quantité avec une validation minimale de 1
   });
 
-  //input élément parent
-  @Input() placeholder: string = 'Sélectionnez une catégorie'; // Placeholder
-  @Input() HemsAlterationArticles: number[] = [];
-  categories: any[] = []; // Stocke les catégories filtrées
+  //Filtrer les catégories
+  categoryIds: number[] = [10, 11, 12, 13, 14, 15, 16, 18]; // IDs à inclure dans les résultats
+  specificServiceIds: number[] = [3];
 
   constructor(
-    private ServiceProvisionResponseService: ServiceProvisionResponseService,
-    private CategoryArticleResponseService: CategoryArticleService,
-    private TypeMaterialResponseService: TypeMaterialService,
-    private ColorResponseService: ColorService,
+    private serviceProvisionResponseService: ServiceProvisionResponseService,
+    private categoryArticleResponseService: CategoryArticleService,
+    private typeMaterialResponseService: TypeMaterialService,
+    private colorResponseService: ColorService,
     private route: ActivatedRoute,
     private formDataService: FormDataServiceService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
+    this.initializePageId();
     this.selectedServiceProvisionResponse(); // Récupérer les données du service
     this.loadCategoryData(); // Charger toutes les catégories, types et couleurs
     this.loadFormData();
@@ -71,18 +74,32 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     this.allCategoryArticle();
     this.allTypeMaterial();
     this.allColor();
+    this.loadCategoryArticles();
+  }
+
+  private initializePageId(): void {
+    const id = +this.route.snapshot.params['id']; // Extraction de l'ID via snapshot
+    if (isNaN(id)) {
+      console.error('ID invalide dans l\'URL. Redirection en cours...');
+      this.router.navigate(['/']); // Redirection si l'ID est invalide
+      return;
+    }
+
+    this.pageId = id; // Stocker l'ID validé
+    console.log('ID validé extrait :', this.pageId);
+
   }
 
   addItem(): void {
-    if (this.itemForm.valid && this.selectedArticle && this.ServiceProvisionResponseItemData) {
+    if (this.itemForm.valid && this.selectedArticle && this.serviceProvisionResponseItemData) {
       const formData = this.itemForm.value;
 
-      const basePrice = this.ServiceProvisionResponseItemData.price_service;
+      const basePrice = this.serviceProvisionResponseItemData.price_service;
       const multiplier = this.selectedArticle.multiplier_price || 1;
       const totalPrice = basePrice * multiplier;
 
       const newItem = {
-        serviceName: this.ServiceProvisionResponseItemData.name_service,
+        serviceName: this.serviceProvisionResponseItemData.name_service,
         clothName: this.selectedArticle.name_category_article,
         multiplier: multiplier,
         basePrice: basePrice,
@@ -117,53 +134,105 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     }
   }
 
-  // Charger le service à partir de l'ID dans l'URL
   selectedServiceProvisionResponse(): void {
-    const subscription = this.route.params.subscribe((params) => {
-      const serviceId = params['id'];
-  
-      this.ServiceProvisionResponseService.fetchOneServiceProvisionResponse(serviceId).subscribe({
-        next: (data) => {
-          if (data) {
-            // L'ID est valide, charger les données
-            this.ServiceProvisionResponseItemData = data;
-          } else {
-            // L'ID est invalide, rediriger vers la page d'accueil
-            this.router.navigate(['/']);
-          }
-        },
-        error: (err) => {
-          console.error('Erreur lors de la récupération des données :', err);
-          // Rediriger également en cas d'erreur (par exemple, ID non trouvé)
+    // Extraire et valider l'ID depuis l'URL
+    const serviceId = this.pageId;
+
+    if (serviceId === null) {
+      // ID invalide, rediriger immédiatement
+      console.error('ID invalide dans l\'URL. Redirection en cours...');
+      this.router.navigate(['/']);
+      return;
+    }
+
+    // Charger les données du service
+    const subscription = this.serviceProvisionResponseService.fetchOneServiceProvisionResponse(serviceId).subscribe({
+      next: (data) => {
+        if (data) {
+          // L'ID est valide, charger les données
+          this.serviceProvisionResponseItemData = data;
+          console.log('Données du service chargées :', data);
+        } else {
+          // L'ID est valide mais aucune donnée n'est retournée
+          console.warn('Aucune donnée trouvée pour cet ID. Redirection en cours...');
           this.router.navigate(['/']);
-        },
-      });
+        }
+      },
+      error: (err) => {
+        // Erreur lors de l'appel API, rediriger
+        console.error('Erreur lors de la récupération des données :', err);
+        this.router.navigate(['/']);
+      },
     });
-  
+
     this.subscriptions.push(subscription);
   }
-  
+
+  // Charger les catégories et appliquer un filtre temporaire pour l'affichage
+  private loadCategoryArticles(): void {
+    this.categoryArticleResponseService.fetchAllCategoryArticle().subscribe({
+      next: (response: ApiListResponse) => {
+        // Stocker les données sans filtrer
+        this.categoryArticleMembers = response['hydra:member']; // Récupérer tous les articles
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des catégories :', err);
+      },
+    });
+  }
+
+  getFilteredArticles(): CategoryArticle[] {
+    // Vérifier si l'ID de la page correspond à un service spécifique
+    if (this.specificServiceIds.includes(this.pageId)) {
+      // Appliquer le filtre sur categoryArticleMembers
+      return this.categoryArticleMembers.filter((article) => {
+
+        // Vérifier que subcategory_article n'est pas null ou undefined
+        if (!article.subcategory_article) {
+          return false; // Ignorer cet article
+        }
+
+        // Normaliser subcategory_article pour gérer les cas où ce n'est pas un tableau
+        const subcategories = Array.isArray(article.subcategory_article)
+          ? article.subcategory_article
+          : article.subcategory_article
+            ? [article.subcategory_article]
+            : [];
+
+        // Vérifier si au moins une sous-catégorie correspond à un ID valide
+        return subcategories.some((subcategory) =>
+          this.categoryIds.includes(subcategory.id)
+        );
+      });
+    }
+
+    // Si pageId ne correspond pas à un service spécifique, afficher toutes les catégories
+    return this.categoryArticleMembers.filter((article) => article.subcategory_article);
+  }
+
+
+
 
   allCategoryArticle() {
-    const subscription = this.CategoryArticleResponseService.fetchAllCategoryArticle().subscribe((response: ApiListResponse) => {
-      this.ApiData = response;
-      this.CategoryArticleMembers = response['hydra:member'];
+    const subscription = this.categoryArticleResponseService.fetchAllCategoryArticle().subscribe((response: ApiListResponse) => {
+      this.apiData = response;
+      this.categoryArticleMembers = response['hydra:member'];
     });
     this.subscriptions.push(subscription);
   }
 
   allTypeMaterial() {
-    const subscription = this.TypeMaterialResponseService.fetchAllTypeMaterials().subscribe((response: ApiListResponse) => {
-      this.ApiData = response;
-      this.TypeMaterialMembers = response['hydra:member'];
+    const subscription = this.typeMaterialResponseService.fetchAllTypeMaterials().subscribe((response: ApiListResponse) => {
+      this.apiData = response;
+      this.typeMaterialMembers = response['hydra:member'];
     });
     this.subscriptions.push(subscription);
   }
 
   allColor() {
-    const subscription = this.ColorResponseService.fetchAllColor().subscribe((response: ApiListResponse) => {
-      this.ApiData = response;
-      this.ColorMembers = response['hydra:member'];
+    const subscription = this.colorResponseService.fetchAllColor().subscribe((response: ApiListResponse) => {
+      this.apiData = response;
+      this.colorMembers = response['hydra:member'];
     });
     this.subscriptions.push(subscription);
   }
@@ -171,14 +240,14 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
   // Gestion de la sélection d'un vêtement
   onArticleSelect(event: Event) {
     const selectedArticleId = +(event.target as HTMLSelectElement).value;
-    this.selectedArticle = this.CategoryArticleMembers.find((article) => article.id === selectedArticleId) || null;
+    this.selectedArticle = this.categoryArticleMembers.find((article) => article.id === selectedArticleId) || null;
     this.calculatePrice(); // Met à jour le prix total
   }
 
   // Calcul du prix total basé sur le multiplicateur du vêtement
   private calculatePrice(): void {
-    if (this.selectedArticle && this.ServiceProvisionResponseItemData) {
-      this.totalPrice = this.ServiceProvisionResponseItemData.price_service * this.selectedArticle.multiplier_price;
+    if (this.selectedArticle && this.serviceProvisionResponseItemData) {
+      this.totalPrice = this.serviceProvisionResponseItemData.price_service * this.selectedArticle.multiplier_price;
     }
   }
 
@@ -187,9 +256,9 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
 
     // Récupérer l'article sélectionné (vêtement) en fonction de l'ID
     const selectedClothId = formData.cloth;
-    const selectedCloth = this.CategoryArticleMembers.find(article => article.id === selectedClothId);
+    const selectedCloth = this.categoryArticleMembers.find(article => article.id === selectedClothId);
 
-    if (selectedCloth && this.ServiceProvisionResponseItemData) {
+    if (selectedCloth && this.serviceProvisionResponseItemData) {
       // Récupérer les données existantes dans le sessionStorage
       let existingData = JSON.parse(sessionStorage.getItem('serviceProvisionData') || '[]');
 
@@ -199,10 +268,10 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
 
       // Créer une nouvelle entrée avec les données du formulaire, le nom du service et le prix total
       const newEntry = {
-        serviceName: this.ServiceProvisionResponseItemData.name_service,  // Nom du service
+        serviceName: this.serviceProvisionResponseItemData.name_service,  // Nom du service
         clothId: selectedCloth.id,  // ID du vêtement
         clothName: selectedCloth.name_category_article,  // Nom du vêtement
-        totalPrice: this.ServiceProvisionResponseItemData.price_service * selectedCloth.multiplier_price,  // Prix total calculé
+        totalPrice: this.serviceProvisionResponseItemData.price_service * selectedCloth.multiplier_price,  // Prix total calculé
         ...formData  // Ajouter les autres données du formulaire (matériau, couleur, etc.)
       };
 

@@ -1,4 +1,4 @@
-<section *ngIf="ServiceProvisionResponseItemData" class="container">
+<section *ngIf="serviceProvisionResponseItemData" class="container">
 
     <a class="back" routerLink="/nos_prestations">Retour</a>
 
@@ -12,9 +12,13 @@
                 <select formControlName="cloth" name="cloth" id="cloth" (change)="onArticleSelect($event)" required>
                     <option value="">--Sélectionner votre vêtement--</option>
 
-                    <option *ngFor="let categoryArticle of CategoryArticleMembers | isSubArticle;"
+                    <!-- <option *ngFor="let categoryArticle of categoryArticleMembers | isSubArticle;"
                         [value]="categoryArticle.id">
                         {{categoryArticle.name_category_article}}
+                    </option> -->
+
+                    <option *ngFor="let article of getFilteredArticles()" [value]="article.id">
+                        {{ article.name_category_article }}
                     </option>
 
 
@@ -30,7 +34,7 @@
                 <select formControlName="material" name="material" id="material">
 
                     <option value="">--Selectionner votre matériau--</option>
-                    @for(typeMaterial of TypeMaterialMembers; track typeMaterial.id){
+                    @for(typeMaterial of typeMaterialMembers; track typeMaterial.id){
                     <option value="{{typeMaterial.name_type_material}}">{{typeMaterial.name_type_material}}</option>
                     }
                 </select>
@@ -45,7 +49,7 @@
                 <select formControlName="color" name="color" id="color">
 
                     <option value="">--Selectionner votre couleur--</option>
-                    @for(color of ColorMembers; track color.id){
+                    @for(color of colorMembers; track color.id){
                     <option value="{{color.name_color}}">{{color.name_color}}</option>
                     }
                 </select>
@@ -76,21 +80,21 @@
         <div class="col-md-5 col-xs-12 order-sm-0 order-md-2 service_provision_item ">
             <div class="service_provision_item_content">
                 <div class="service_provision_item_name">
-                    {{ServiceProvisionResponseItemData.name_service}}
+                    {{serviceProvisionResponseItemData.name_service}}
                 </div>
                 <div class="service_provision_item_image">
-                    <img src="assets/images/{{ServiceProvisionResponseItemData.image_service}}"
-                        alt="{{ServiceProvisionResponseItemData.name_service}}">
+                    <img src="assets/images/{{serviceProvisionResponseItemData.image_service}}"
+                        alt="{{serviceProvisionResponseItemData.name_service}}">
                 </div>
                 <div>
-                    {{ServiceProvisionResponseItemData.description}}
+                    {{serviceProvisionResponseItemData.description}}
                 </div>
                 <div class="d-flex justify-content-evenly">
                     <span>Prix unitaire :</span>
 
                     <!-- Si un article est sélectionné, on affiche le prix multiplié par le multiplicateur -->
                     <span *ngIf="selectedArticle">
-                        {{ selectedArticle.multiplier_price*ServiceProvisionResponseItemData.price_service |
+                        {{ selectedArticle.multiplier_price*serviceProvisionResponseItemData.price_service |
                         number:'1.0-2' }} €
                     </span>
 
