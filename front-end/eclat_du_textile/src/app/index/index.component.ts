@@ -18,19 +18,27 @@ import { ServiceProvisionResponseService } from '../shared/services/service-prov
 export class IndexComponent implements OnInit {
 
   data: ApiListResponse | undefined;
-  members: ServiceProvision[] = [];
+  serviceMembers: ServiceProvision[] = [];
 
-  constructor(private ServiceProvisionResponseservice: ServiceProvisionResponseService) {}
-/*   categoryArticle$ = inject(CategoryArticleService).fetchAllCategoryArticle(); */
+  constructor(private ServiceProvisionResponseservice: ServiceProvisionResponseService) { }
 
-article: any;
+  article: any;
 
-ngOnInit(): void {
-  this.ServiceProvisionResponseservice.fetchAllServicesProvision().subscribe((response: ApiListResponse) => {
-    this.data = response
-    this.members = response["hydra:member"]
-  })
-}
+  ngOnInit(): void {
+    this.SelectedServiceProvisionResponse();
+  }
+
+  SelectedServiceProvisionResponse(){
+    this.ServiceProvisionResponseservice.fetchAllServicesProvision().subscribe({
+      next: (response: ApiListResponse) => {
+        // Limiter le nombre de résultats à 3 articles
+        this.serviceMembers = response['hydra:member'].slice(0, 3);
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des catégories :', err);
+      },
+    });
+  };
 
   authService = inject(AuthService);
 

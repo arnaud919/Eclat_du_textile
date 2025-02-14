@@ -1,10 +1,60 @@
-<div>Accueil</div>
-
-<div *ngIf="data">
-
-    <div *ngFor="let member of members">
-        <div>{{member.name_service}}</div>
-    </div>
-
-
+<div class="container">
+    <h1 class="page_title title">L'éclat du textile</h1>
+    <section>
+        <div class="row flex-column flex-lg-row row-gap-5">
+            <div class="col">
+                <img class="img-fluid" src="assets/images/description_l'eclat_du_textile.webp"
+                    alt="description_compagny">
+            </div>
+            <div class="col align-middle">
+                <div class="d-flex flex-column height-text justify-content-center img-description">
+                    <p>
+                        Redonner à vos vêtements toute leur brillance et faîtes disparaître toutes les tâches et
+                        imperfections.
+                    </p>
+                    <p>
+                        Nous nous occupons de les rendre propre comme au premier jour.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2 class="page_title">Nos prestations</h2>
+        <div class="row justify-content-center gap-5">
+            <a class="service_provision col-xs-12 col-md-3" *ngFor="let member of serviceMembers; index as id"
+                routerLink="nos_prestations/{{member.id}}">
+                <div class="service_provision_name">{{member.name_service}}</div>
+                <div class="service_provision_image" *ngIf="member.image_service">
+                    <img src="assets/images/{{member.image_service}}" alt="{{member.name_service}}">
+                </div>
+                <div class="service_provision_description">{{member.description}}</div>
+            </a>
+            <div id="provision-link">
+                <a class="link-color" routerLink="nos_prestations">Voir toutes nos prestaions ></a>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2 class="page_title">À propos</h2>
+        <div class="row flex-column-reverse flex-lg-row row-gap-5">
+            <div class="col align-middle">
+                <div class="d-flex flex-column height-text justify-content-center img-description">
+                    <p>Petit pressing familiale situé dans le 3 ème arrondissement de Lyon, depuis plus de 10 ans.</p>
+                    <p>Notre équipe engagé, continue de repondre à toutes les demandes afin de satisfaire tous vos
+                        besoins même les plus petits.</p>
+                </div>
+            </div>
+            <div class="col">
+                <img class="img-fluid" src="assets/images/description_a_propos.webp" alt="description_a_propos">
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2 class="page_title">Nous contacter</h2>
+        <div class="align-middle text-center">
+            <p>Des questions ? Une demande d’information ? Un renseignement ?</p>
+            <p>N’hésitez pas à nous contacter sur notre <a class="link-color no-underline" routerLink="contact">page dédié</a>.</p>
+        </div>
+    </section>
 </div>

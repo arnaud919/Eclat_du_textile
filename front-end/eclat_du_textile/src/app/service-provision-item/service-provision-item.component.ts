@@ -210,9 +210,6 @@ export class ServiceProvisionResponseItemComponent implements OnInit, OnDestroy 
     return this.categoryArticleMembers.filter((article) => article.subcategory_article);
   }
 
-
-
-
   allCategoryArticle() {
     const subscription = this.categoryArticleResponseService.fetchAllCategoryArticle().subscribe((response: ApiListResponse) => {
       this.apiData = response;

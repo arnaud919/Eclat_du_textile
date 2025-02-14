@@ -7,6 +7,7 @@ import { ServiceProvisionResponseComponent } from './service-provision/service-p
 import { ServiceProvisionResponseItemComponent } from './service-provision-item/service-provision-item.component';
 import { ProfileComponent } from './profil/profil.component';
 import { CartShopComponent } from './cart-shop/cart-shop.component';
+import { ContactComponent } from './contact/contact.component';
 
 export const routes: Routes = [
   { path: "", component: IndexComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: "nos_prestations/:id", component: ServiceProvisionResponseItemComponent },
   { path: "profil", component: ProfileComponent, canActivate: [authGuard] },
   { path: "commande", component: CartShopComponent, canActivate: [authGuard], data: { showHeader: false } },
+  { path: "contact", component: ContactComponent},
   { path: "**", redirectTo: "" }
 ];
 

@@ -1,0 +1,31 @@
+.title{
+    font-size: 3rem;
+    text-decoration:underline solid #19456B 2px;
+    text-underline-offset: 6px;
+}
+
+img.img-fluid{
+    border: black 2px solid;
+}
+
+.img-description{
+    font-size: large;
+}
+
+.height-text{
+    height: 100%;
+}
+
+#provision-link{
+    text-align: center;
+}
+
+.container>:not(section:last-child){
+    margin-bottom: 150px;
+}
+
+@media screen and (max-width:960px) {
+    .container>:not(section:last-child){
+        margin-bottom: 100px;
+    }
+}

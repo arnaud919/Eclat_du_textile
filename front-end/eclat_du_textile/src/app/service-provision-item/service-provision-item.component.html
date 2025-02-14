@@ -12,11 +12,6 @@
                 <select formControlName="cloth" name="cloth" id="cloth" (change)="onArticleSelect($event)" required>
                     <option value="">--Sélectionner votre vêtement--</option>
 
-                    <!-- <option *ngFor="let categoryArticle of categoryArticleMembers | isSubArticle;"
-                        [value]="categoryArticle.id">
-                        {{categoryArticle.name_category_article}}
-                    </option> -->
-
                     <option *ngFor="let article of getFilteredArticles()" [value]="article.id">
                         {{ article.name_category_article }}
                     </option>

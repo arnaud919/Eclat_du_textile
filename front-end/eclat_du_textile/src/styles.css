@@ -55,6 +55,18 @@ html {
     text-decoration: underline;
 }
 
+p{
+    color: #19456B;
+}
+
+.link-color{
+    color:#16C79A;
+}
+
+.no-underline{
+    text-decoration: none;
+}
+
 .service_provision {
 
     border: solid #19456B 1px;
