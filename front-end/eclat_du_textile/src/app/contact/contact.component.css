@@ -1,0 +1,18 @@
+.contact-infos{
+    width:50%;
+    margin:auto;
+    text-align: center;
+
+    *{
+        font-size: x-large;
+    }
+}
+
+a{
+    color:#19456B;
+    text-decoration: none;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
