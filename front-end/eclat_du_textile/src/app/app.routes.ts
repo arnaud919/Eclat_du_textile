@@ -8,6 +8,7 @@ import { ServiceProvisionResponseItemComponent } from './service-provision-item/
 import { ProfileComponent } from './profil/profil.component';
 import { CartShopComponent } from './cart-shop/cart-shop.component';
 import { ContactComponent } from './contact/contact.component';
+import { AProposComponent } from './a-propos/a-propos.component';
 
 export const routes: Routes = [
   { path: "", component: IndexComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: "profil", component: ProfileComponent, canActivate: [authGuard] },
   { path: "commande", component: CartShopComponent, canActivate: [authGuard], data: { showHeader: false } },
   { path: "contact", component: ContactComponent},
+  { path: "a_propos", component: AProposComponent},
   { path: "**", redirectTo: "" }
 ];
 

@@ -22,6 +22,6 @@
   app-footer {
     flex-shrink: 0; /* Empêche le footer de se rétrécir */
     text-align: center;
-    padding: 10px 0;
+
   }
   
