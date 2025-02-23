@@ -9,6 +9,10 @@ import { ProfileComponent } from './profil/profil.component';
 import { CartShopComponent } from './cart-shop/cart-shop.component';
 import { ContactComponent } from './contact/contact.component';
 import { AProposComponent } from './a-propos/a-propos.component';
+import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { GeneralConditionsOfSaleComponent } from './general-conditions-of-sale/general-conditions-of-sale.component';
+import { CancellationPolicyComponent } from './cancellation-policy/cancellation-policy.component';
 
 export const routes: Routes = [
   { path: "", component: IndexComponent },
@@ -18,8 +22,12 @@ export const routes: Routes = [
   { path: "nos_prestations/:id", component: ServiceProvisionResponseItemComponent },
   { path: "profil", component: ProfileComponent, canActivate: [authGuard] },
   { path: "commande", component: CartShopComponent, canActivate: [authGuard], data: { showHeader: false } },
-  { path: "contact", component: ContactComponent},
-  { path: "a_propos", component: AProposComponent},
+  { path: "contact", component: ContactComponent },
+  { path: "a_propos", component: AProposComponent },
+  { path: "mentions_legales", component: LegalNoticeComponent },
+  { path: "politique_de_confidentialite", component: PrivacyPolicyComponent },
+  { path: "conditions_générales_de_vente", component: GeneralConditionsOfSaleComponent },
+  { path: "politique_d_annulation", component: CancellationPolicyComponent },
   { path: "**", redirectTo: "" }
 ];
 

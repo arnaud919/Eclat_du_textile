@@ -6,3 +6,9 @@ div{
 img{
     width:100%;
 }
+
+@media screen and (max-width:992px) {
+    div{
+        width: 100%;
+    }
+}
